@@ -11,6 +11,8 @@
     <string name="title_activity_onboarding_screen">OnboardingScreen</string>
     <string name="title_activity_register2_screen">Register2Screen</string>
     <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="title_activity_dashboard_screen">DashboardScreen</string>
+    <string name="title_activity_my_teams_screen">MyTeamsScreen</string>
     <string name="continue_">Continuar</string>
     <string name="name">Nome</string>
     <string name="last_name">Sobrenome</string>
@@ -22,6 +24,7 @@
     <string name="events">Eventos</string>
     <string name="team">Time</string>
     <string name="chat">Chat</string>
+    <string name="dashboard">Dashboard</string>
 
     <!-- PLACEHOLDERS -->
     <string name="email_placeholder">seuemail@email.com</string>
@@ -37,6 +40,8 @@
     <string name="team_icon_desc">Ícone de Time</string>
     <string name="events_icon_desc">Ícone de Eventos</string>
     <string name="account_icon_desc">Ícone de Conta</string>
+    <string name="menu_icon_desc">Ícone de Menu</string>
+    <string name="notification_icon_desc">Ícone de Notificações</string>
 
     <!-- TEXTOS -->
     <string name="developed_by">Desenvolvido por</string>
@@ -57,7 +62,10 @@
     <string name="add_email">Insira seu email</string>
     <string name="team_image_desc">Imagem do escudo do time %1$s</string>
     <string name="players_amount">%1$d jogadores</string>
-    <string name="title_activity_my_teams_screen">MyTeamsScreen</string>
     <string name="logged_as">Logado como %1$s</string>
     <string name="my_teams">Meus times</string>
+    <string name="versus">vs</string>
+    <string name="challenged_logo">Imagem do time desafiado %1$s</string>
+    <string name="challenger_logo">Imagem do time desafiador %1$s</string>
+
 </resources>
