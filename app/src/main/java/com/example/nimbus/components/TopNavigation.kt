@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.R
+import com.example.nimbus.ui.theme.catamaranFontFamily
+import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun TopNavigation(
@@ -30,8 +32,8 @@ fun TopNavigation(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
-            .padding(30.dp, 10.dp),
+            .height(68.dp)
+            .padding(20.dp, 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -44,16 +46,20 @@ fun TopNavigation(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = screen,
-                fontSize = 24.sp,
+                text = screen.toUpperCase(),
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFFFEAE0)
+                color = Color(0xFFFFEAE0),
+                fontFamily = poppinsFontFamily
             )
 
             if(subtext != null) {
                 Text(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
                     text = subtext,
-                    color = Color(0xFF696969)
+                    color = Color(0xFF696969),
+                    fontFamily = poppinsFontFamily,
                 )
             }
         }

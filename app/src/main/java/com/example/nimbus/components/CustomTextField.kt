@@ -34,7 +34,7 @@ import com.example.nimbus.ui.theme.catamaranFontFamily
 fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
+    label: String? = null,
     placeholder: String,
     leadingIcon: Painter? = null,
     trailingIcon: Painter? = null,
@@ -45,12 +45,14 @@ fun CustomTextField(
 
 ) {
     Column {
-        Text(
-            text = label,
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
+        if(label != null) {
+            Text(
+                text = label,
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
         TextField(
             value = value,
             onValueChange = onValueChange,
@@ -68,18 +70,21 @@ fun CustomTextField(
 fun CustomTextFieldWithIcon(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
+    label: String? = null,
     placeholder: String,
     icon: Int,
     iconDescription: String
 ) {
     Column {
-        Text(
-            text = label,
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
+        if(label != null) {
+            Text(
+                text = label,
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
         TextField(
             value = value,
             onValueChange = onValueChange,

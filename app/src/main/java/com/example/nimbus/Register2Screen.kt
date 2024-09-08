@@ -38,8 +38,10 @@ import androidx.compose.ui.unit.sp
 class Register2Screen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
+            window.statusBarColor = getColor(R.color.gray_900)
+            window.navigationBarColor = getColor(R.color.gray_900)
             NimbusTheme {
                 Scaffold(
                     modifier = Modifier

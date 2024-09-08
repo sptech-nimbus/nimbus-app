@@ -1,5 +1,6 @@
 package com.example.nimbus
 
+import android.content.Intent
 import com.example.nimbus.components.TeamCard
 
 import android.os.Bundle
@@ -34,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,8 +50,10 @@ import kotlin.math.min
 class MyTeamsScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
+            window.statusBarColor = getColor(R.color.gray_900)
+            window.navigationBarColor = getColor(R.color.gray_900)
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MyTeamsScreen(
@@ -62,46 +66,10 @@ class MyTeamsScreen : ComponentActivity() {
     }
 }
 
-fun Modifier.drawFadingEdges(
-    scrollableState: ScrollableState,
-    topEdgeHeight: Dp = 18.dp,
-    bottomEdgeHeight: Dp = 18.dp,
-) = then(
-    Modifier
-        .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
-        .drawWithContent {
-            drawContent()
-
-            val topEdgeHeightPx = topEdgeHeight.toPx()
-            val bottomEdgeHeightPx = bottomEdgeHeight.toPx()
-
-            if (scrollableState.canScrollBackward && topEdgeHeightPx >= 1f) {
-                drawRect(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black),
-                        startY = 0f,
-                        endY = topEdgeHeightPx,
-                    ),
-                    blendMode = BlendMode.DstIn,
-                )
-            }
-
-            if (scrollableState.canScrollForward && bottomEdgeHeightPx >= 1f) {
-                drawRect(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.Black, Color.Transparent),
-                        startY = size.height - bottomEdgeHeightPx,
-                        endY = size.height,
-                    ),
-                    blendMode = BlendMode.DstIn,
-                )
-            }
-        }
-)
-
-
 @Composable
 fun MyTeams() {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -165,7 +133,8 @@ fun MyTeams() {
                     teamName = team.teamName,
                     teamImage = team.teamImage,
                     players = team.players,
-                    badge = team.badge?.let { painterResource(id = it) }
+                    badge = team.badge?.let { painterResource(id = it) },
+                    onClick = { context.startActivity(Intent(context, DashboardScreen::class.java)) }
                 )
             }
         }

@@ -45,8 +45,10 @@ import com.example.nimbus.ui.theme.poppinsFontFamily
 class OnboardingScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
+            window.statusBarColor = getColor(R.color.gray_900)
+            window.navigationBarColor = getColor(R.color.gray_900)
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     OnboardingScreen(

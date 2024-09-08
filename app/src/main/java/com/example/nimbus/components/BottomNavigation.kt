@@ -1,41 +1,48 @@
 package com.example.nimbus.components
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.nimbus.DashboardScreen
 import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.R
+import com.example.nimbus.Register1Screen
+import com.example.nimbus.RosterScreen
 import com.example.nimbus.ui.theme.NimbusTheme
 
 @Composable
 fun BottomNavigation(
-    screen: Int? = null
+    screen: String
 ) {
-    var screenName: String = ""
-    if (screen != null) {
-        screenName = stringResource(id = screen)
-    }
+    var screenName: String = screen
+    val context = LocalContext.current
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF212121))
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            .padding(horizontal = 16.dp, vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -48,6 +55,7 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.chat_icon,
             iconDesc = R.string.chat,
+            onClick = {}
         )
 
         if(screenName == "Time")
@@ -59,6 +67,7 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.team_icon,
             iconDesc = R.string.team,
+            onClick = { context.startActivity(Intent(context, RosterScreen::class.java)) }
         )
 
         if(screenName == "Home")
@@ -70,6 +79,7 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.house_icon,
             iconDesc = R.string.home,
+            onClick = { context.startActivity(Intent(context, DashboardScreen::class.java)) }
         )
 
         if(screenName == "Eventos")
@@ -80,7 +90,8 @@ fun BottomNavigation(
             )
         else NavItem(
             iconRes = R.drawable.calender_icon,
-            iconDesc = R.string.events
+            iconDesc = R.string.events,
+            onClick = {}
         )
 
         if(screenName == "Conta")
@@ -92,17 +103,27 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.user_icon,
             iconDesc = R.string.account,
+            onClick = {}
         )
     }
 }
 
 @Composable
-fun NavItem(iconRes: Int, iconDesc: Int) {
+fun NavItem(iconRes: Int, iconDesc: Int, onClick: () -> Unit) {
+    val interactionSource= remember { MutableInteractionSource() }
+
     Image(
         painter = painterResource(id = iconRes),
         contentDescription = stringResource(id = iconDesc),
-        modifier = Modifier.size(35.dp),
-        contentScale = ContentScale.Fit
+        contentScale = ContentScale.Fit,
+        modifier = Modifier
+            .size(35.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                onClick()
+            },
     )
 }
 
@@ -145,11 +166,11 @@ fun ActiveNavItem(iconRes: Int, screenName: String, iconDesc: Int) {
 fun BottomNavigationPreview() {
     NimbusTheme {
         Column {
-            BottomNavigation(screen = R.string.chat)
-            BottomNavigation(screen = R.string.team)
-            BottomNavigation(screen = R.string.home)
-            BottomNavigation(screen = R.string.events)
-            BottomNavigation(screen = R.string.account)
+            BottomNavigation(screen = stringResource(id = R.string.chat))
+            BottomNavigation(screen = stringResource(id = R.string.team))
+            BottomNavigation(screen = stringResource(id = R.string.home))
+            BottomNavigation(screen = stringResource(id = R.string.events))
+            BottomNavigation(screen = stringResource(id = R.string.account))
         }
     }
 }

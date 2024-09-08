@@ -46,7 +46,7 @@ fun MatchCard(
             Image(
                 painter = painterResource(id = challengerLogo),
                 contentDescription = stringResource(id = R.string.challenger_logo, challengerName),
-                modifier = Modifier.size(58.dp),
+                modifier = Modifier.size(50.dp),
                 contentScale = ContentScale.Fit
             )
             Text(
@@ -58,21 +58,20 @@ fun MatchCard(
             Image(
                 painter = painterResource(id = challengedLogo),
                 contentDescription = stringResource(id = R.string.challenged_logo, challengedName),
-                modifier = Modifier.size(58.dp),
+                modifier = Modifier.size(50.dp),
                 contentScale = ContentScale.Fit
             )
             Column {
                 Text(
                     text = dateTime,
                     color = Color(0xFFFFEAE0),
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
                 )
-                Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = place,
                     color = Color(0xFFFFEAE0),
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
                 )
             }

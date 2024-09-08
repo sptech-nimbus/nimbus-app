@@ -26,24 +26,24 @@ import com.example.nimbus.ui.theme.poppinsFontFamily
 fun Container(
     title: String? = null,
     subtitle: String? = null,
-    content: @Composable () -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .clip(RoundedCornerShape(10.dp)),
         color = Color(0xFF212121),
         border = BorderStroke(1.dp, Color(0xFF353434))
     ) {
         Column(
             modifier = Modifier
-                .padding(10.dp, 16.dp)
+                .padding(12.dp)
                 .fillMaxWidth()
         ) {
             if(title != null) {
                 Text(
                     text = title,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     color = Color(0xFFFFEAE0),
                     fontWeight = FontWeight.Bold,
                     fontFamily = catamaranFontFamily
@@ -53,9 +53,11 @@ fun Container(
 
                 if (subtitle != null) {
                     Text(
-                        text = subtitle,
+                        text = title,
+                        fontSize = 12.sp,
                         color = Color(0xFFBDBDBD),
-                        fontFamily = poppinsFontFamily
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = catamaranFontFamily
                     )
 
                     Spacer(modifier = Modifier.height(5.dp))

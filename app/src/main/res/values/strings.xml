@@ -7,12 +7,6 @@
     <string name="password">Senha</string>
     <string name="confirm_password">Confirmar Senha</string>
     <string name="app_name">nimbus</string>
-    <string name="title_activity_splash_screen">SplashScreen</string>
-    <string name="title_activity_onboarding_screen">OnboardingScreen</string>
-    <string name="title_activity_register2_screen">Register2Screen</string>
-    <string name="title_activity_login_screen">LoginScreen</string>
-    <string name="title_activity_dashboard_screen">DashboardScreen</string>
-    <string name="title_activity_my_teams_screen">MyTeamsScreen</string>
     <string name="continue_">Continuar</string>
     <string name="name">Nome</string>
     <string name="last_name">Sobrenome</string>
@@ -25,6 +19,20 @@
     <string name="team">Time</string>
     <string name="chat">Chat</string>
     <string name="dashboard">Dashboard</string>
+    <string name="my_team">Meu time</string>
+    <string name="info">Informações</string>
+    <string name="height">Altura</string>
+    <string name="weight">Peso</string>
+    <string name="position">Posição</string>
+    <string name="age">Idade</string>
+    <string name="category">categoria</string>
+    <string name="birth_date">Data Nascimento</string>
+    <string name="birth_date_short">Dt. Nascimento</string>
+    <string name="address">Endereço</string>
+    <string name="stats">Estatísticas</string>
+    <string name="injuries">Lesões</string>
+    <string name="delete">Excluir</string>
+    <string name="save">Salvar</string>
 
     <!-- PLACEHOLDERS -->
     <string name="email_placeholder">seuemail@email.com</string>
@@ -42,6 +50,7 @@
     <string name="account_icon_desc">Ícone de Conta</string>
     <string name="menu_icon_desc">Ícone de Menu</string>
     <string name="notification_icon_desc">Ícone de Notificações</string>
+    <string name="search_icon_desc">Ícone de Pesquisa</string>
 
     <!-- TEXTOS -->
     <string name="developed_by">Desenvolvido por</string>
@@ -51,7 +60,6 @@
     <string name="has_account">Já possui uma conta?</string>
     <string name="go_to_login">Faça login</string>
     <string name="need_info">Precisaremos de algumas informações para realizar seu</string>
-    <string name="birth_date">Data de nascimento</string>
     <string name="logo_desc">Logo da empresa Nimbus que consiste de uma bola de basquete com um raio no meio.</string>
     <string name="text_logo_desc">Logo da empresa Nimbus que consiste no nome da empresa com um raio no lugar o I.</string>
     <string name="create_account">Criar uma conta</string>
@@ -68,4 +76,13 @@
     <string name="challenged_logo">Imagem do time desafiado %1$s</string>
     <string name="challenger_logo">Imagem do time desafiador %1$s</string>
 
+    <!-- ACTIVITIES -->
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_onboarding_screen">OnboardingScreen</string>
+    <string name="title_activity_register2_screen">Register2Screen</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="title_activity_dashboard_screen">DashboardScreen</string>
+    <string name="title_activity_my_teams_screen">MyTeamsScreen</string>
+    <string name="title_activity_roster_screen">RosterScreen</string>
+    <string name="title_activity_events_screen">EventsScreen</string>
 </resources>

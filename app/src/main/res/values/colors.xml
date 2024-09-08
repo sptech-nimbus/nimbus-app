@@ -6,8 +6,9 @@
     <color name="orange_100">#ffeae0</color>
     <color name="gray_900">#131313</color>
     <color name="gray_800">#191919</color>
-    <color name="gray_700">#242424</color>
-    <color name="gray_600">#323232</color>
+    <color name="gray_700">#212121</color>
+    <color name="gray_600">#242424</color>
+    <color name="gray_500">#323232</color>
     <color name="gray_200">#d7d7d7</color>
     <color name="white">#ffffff</color>
     <color name="green">#3fb03d</color>
