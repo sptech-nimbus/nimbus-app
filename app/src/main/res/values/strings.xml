@@ -1,0 +1,63 @@
+<resources>
+    <!-- TITULOS -->
+    <string name="register">Cadastro</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="phone">Telefone</string>
+    <string name="password">Senha</string>
+    <string name="confirm_password">Confirmar Senha</string>
+    <string name="app_name">nimbus</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_onboarding_screen">OnboardingScreen</string>
+    <string name="title_activity_register2_screen">Register2Screen</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="continue_">Continuar</string>
+    <string name="name">Nome</string>
+    <string name="last_name">Sobrenome</string>
+    <string name="exit">Sair</string>
+    <string name="roster">Elenco</string>
+    <string name="notification">Notificações</string>
+    <string name="account">Conta</string>
+    <string name="home">Home</string>
+    <string name="events">Eventos</string>
+    <string name="team">Time</string>
+    <string name="chat">Chat</string>
+
+    <!-- PLACEHOLDERS -->
+    <string name="email_placeholder">seuemail@email.com</string>
+    <string name="phone_placeholder">(11) 99999-9999</string>
+    <string name="password_placeholder">**************</string>
+
+    <!-- ÍCONES -->
+    <string name="email_icon_desc">Ícone de Email</string>
+    <string name="eye_icon_desc">Ícone de Olho</string>
+    <string name="lock_icon_desc">Ícone de Cadeado</string>
+    <string name="house_icon_desc">Ícone de Home</string>
+    <string name="chat_icon_desc">Ícone de Chat</string>
+    <string name="team_icon_desc">Ícone de Time</string>
+    <string name="events_icon_desc">Ícone de Eventos</string>
+    <string name="account_icon_desc">Ícone de Conta</string>
+
+    <!-- TEXTOS -->
+    <string name="developed_by">Desenvolvido por</string>
+    <string name="slogan_full">Basquete para todos e perto de você!</string>
+    <string name="slogan_half1">Basquete para todos</string>
+    <string name="slogan_half2">E perto de você!</string>
+    <string name="has_account">Já possui uma conta?</string>
+    <string name="go_to_login">Faça login</string>
+    <string name="need_info">Precisaremos de algumas informações para realizar seu</string>
+    <string name="birth_date">Data de nascimento</string>
+    <string name="logo_desc">Logo da empresa Nimbus que consiste de uma bola de basquete com um raio no meio.</string>
+    <string name="text_logo_desc">Logo da empresa Nimbus que consiste no nome da empresa com um raio no lugar o I.</string>
+    <string name="create_account">Criar uma conta</string>
+    <string name="forget_password">Esqueceu sua senha?</string>
+    <string name="no_account">Não possui uma conta ainda?</string>
+    <string name="no_account_create">Criar uma agora</string>
+    <string name="add_password">Insira sua senha</string>
+    <string name="add_email">Insira seu email</string>
+    <string name="team_image_desc">Imagem do escudo do time %1$s</string>
+    <string name="players_amount">%1$d jogadores</string>
+    <string name="title_activity_my_teams_screen">MyTeamsScreen</string>
+    <string name="logged_as">Logado como %1$s</string>
+    <string name="my_teams">Meus times</string>
+</resources>
