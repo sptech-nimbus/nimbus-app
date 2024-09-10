@@ -13,6 +13,11 @@
         android:theme="@style/Theme.Nimbus"
         tools:targetApi="31">
         <activity
+            android:name=".PlayerInfomationScreen"
+            android:exported="false"
+            android:label="@string/title_activity_player_infomation_screen"
+            android:theme="@style/Theme.Nimbus" />
+        <activity
             android:name=".EventsScreen"
             android:exported="false"
             android:label="@string/title_activity_events_screen"

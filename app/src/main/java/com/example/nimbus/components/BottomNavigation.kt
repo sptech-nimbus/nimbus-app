@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.DashboardScreen
+import com.example.nimbus.EventsScreen
 import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.R
 import com.example.nimbus.Register1Screen
@@ -91,7 +92,7 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.calender_icon,
             iconDesc = R.string.events,
-            onClick = {}
+            onClick = { context.startActivity(Intent(context, EventsScreen::class.java)) }
         )
 
         if(screenName == "Conta")

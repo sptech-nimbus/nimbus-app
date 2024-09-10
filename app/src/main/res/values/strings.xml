@@ -33,6 +33,7 @@
     <string name="injuries">Lesões</string>
     <string name="delete">Excluir</string>
     <string name="save">Salvar</string>
+    <string name="starting">Titular</string>
 
     <!-- PLACEHOLDERS -->
     <string name="email_placeholder">seuemail@email.com</string>
@@ -85,4 +86,5 @@
     <string name="title_activity_my_teams_screen">MyTeamsScreen</string>
     <string name="title_activity_roster_screen">RosterScreen</string>
     <string name="title_activity_events_screen">EventsScreen</string>
+    <string name="title_activity_player_infomation_screen">PlayerInfomationScreen</string>
 </resources>

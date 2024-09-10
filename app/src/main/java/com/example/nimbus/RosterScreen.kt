@@ -1,5 +1,6 @@
 package com.example.nimbus
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,11 +46,14 @@ import com.example.nimbus.components.MatchCard
 import com.example.nimbus.components.TopNavigation
 import com.example.nimbus.ui.theme.NimbusTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -116,12 +120,18 @@ fun Modifier.drawFadingEdges(
 @Composable
 fun Roster(modifier: Modifier = Modifier) {
     var searchPlayer by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val interactionSource= remember { MutableInteractionSource() }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF131313))
-            .padding(top = 10.dp),
+            .padding(top = 10.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            )  { context.startActivity(Intent(context, PlayerInfomationScreen::class.java)) },
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         TopNavigation(screen = stringResource(id = R.string.my_team), subtext = "Golden State Warriors")
