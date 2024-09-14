@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.nimbus.R
 import com.example.nimbus.Register1Screen
 import com.example.nimbus.ui.theme.NimbusTheme
@@ -32,7 +33,7 @@ import com.example.nimbus.ui.theme.poppinsFontFamily
 @Composable
 fun TeamCard(
     teamName: String,
-    teamImage: Int,
+    teamImage: String,
     players: Int,
     badge: Painter? = null,
     onClick: () -> Unit
@@ -51,8 +52,8 @@ fun TeamCard(
         horizontalArrangement = Arrangement.spacedBy(15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = teamImage),
+        AsyncImage(
+            model = teamImage,
             contentDescription = stringResource(id = R.string.team_image_desc, teamName),
             modifier = Modifier
                 .size(60.dp)
@@ -107,7 +108,7 @@ fun CardPreview() {
     NimbusTheme {
         TeamCard(
             teamName = "Golden State Warriors",
-            teamImage = R.mipmap.gsw,
+            teamImage = "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png",
             players = 20,
             badge = painterResource(id = R.drawable.badge_4),
             onClick = {}

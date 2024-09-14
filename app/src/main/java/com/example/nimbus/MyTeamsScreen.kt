@@ -104,16 +104,16 @@ fun MyTeams() {
         //usado apenas para exibição dos itens em lista ⬇️
         data class Team(
             val teamName: String,
-            val teamImage: Int,
+            val teamImage: String,
             val players: Int,
             val badge: Int? = null
         )
         val teams = listOf(
-            Team("Golden State Warriors", R.mipmap.gsw, 20, null),
-            Team("Chigago Bulls", R.mipmap.chicago_bulls, 20, R.drawable.badge_2),
-            Team("Los Angeles Lakers", R.mipmap.la_lakers, 20, R.drawable.badge_3),
-            Team("Corinthians", R.mipmap.corinthians, 20, R.drawable.badge_5),
-            Team("Flamengo", R.mipmap.flamengo, 20, R.drawable.badge_4)
+            Team("Golden State Warriors", "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png", 20, null),
+            Team("Chigago Bulls", "https://cdn.inspireuplift.com/uploads/images/seller_products/17516/1710752450_2.png", 20, R.drawable.badge_2),
+            Team("Los Angeles Lakers", "https://static.vecteezy.com/system/resources/previews/027/127/539/non_2x/lakers-logo-lakers-icon-transparent-free-png.png", 20, R.drawable.badge_3),
+            Team("Corinthians", "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png", 20, R.drawable.badge_5),
+            Team("Flamengo", "https://upload.wikimedia.org/wikipedia/commons/2/22/Logo_Flamengo_crest_1980-2018.png", 20, R.drawable.badge_4)
         )
         //usado apenas para exibição dos itens em lista ⬆️
         val scrollState = rememberLazyListState()
