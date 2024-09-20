@@ -34,6 +34,10 @@
     <string name="delete">Excluir</string>
     <string name="save">Salvar</string>
     <string name="starting">Titular</string>
+    <string name="place">Local</string>
+    <string name="date">Data</string>
+    <string name="start">Início</string>
+    <string name="end">Fim</string>
 
     <!-- PLACEHOLDERS -->
     <string name="email_placeholder">seuemail@email.com</string>
@@ -81,6 +85,8 @@
     <string name="is_injuried_icon">Jogador lesionado</string>
     <string name="not_injuried_icon">Jogador não lesionado</string>
     <string name="player_image">Imagem do jogador %1$s</string>
+    <string name="add_event">Adicionar novo evento</string>
+    <string name="select_category">Selecionar categoria</string>
 
     <!-- ACTIVITIES -->
     <string name="title_activity_splash_screen">SplashScreen</string>
@@ -92,4 +98,7 @@
     <string name="title_activity_roster_screen">RosterScreen</string>
     <string name="title_activity_events_screen">EventsScreen</string>
     <string name="title_activity_player_infomation_screen">PlayerInfomationScreen</string>
+    <string name="challenged_team">Time desafiado</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="search_player">Pesquisar jogador...</string>
 </resources>

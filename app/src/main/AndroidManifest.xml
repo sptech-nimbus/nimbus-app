@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
-    <uses-permission-sdk-23 android:name="android.permission.INTERNET"></uses-permission-sdk-23>
+    <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,47 +14,52 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nimbus"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".PlayerInfomationScreen"
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.Nimbus" />
+        <activity
+            android:name=".ui.PlayerInfomationScreen"
             android:exported="true"
             android:label="@string/title_activity_player_infomation_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".EventsScreen"
+            android:name=".ui.EventsScreen"
             android:exported="true"
             android:label="@string/title_activity_events_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".RosterScreen"
+            android:name=".ui.RosterScreen"
             android:exported="true"
             android:label="@string/title_activity_roster_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".DashboardScreen"
+            android:name=".ui.DashboardScreen"
             android:exported="true"
             android:label="@string/title_activity_dashboard_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".MyTeamsScreen"
+            android:name=".ui.MyTeamsScreen"
             android:exported="true"
             android:label="@string/title_activity_my_teams_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".ui.LoginScreen"
             android:exported="true"
             android:label="@string/title_activity_login_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".Register2Screen"
+            android:name=".ui.Register2Screen"
             android:exported="true"
             android:label="@string/title_activity_register2_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".ui.SplashScreen"
             android:exported="true"
             android:label="Nimbus"
-            android:theme="@style/Theme.Nimbus">
+            android:theme="@style/Theme.Nimbus" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,12 +67,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnboardingScreen"
+            android:name=".ui.OnboardingScreen"
             android:exported="true"
             android:label="@string/title_activity_onboarding_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".Register1Screen"
+            android:name=".ui.Register1Screen"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Nimbus" />

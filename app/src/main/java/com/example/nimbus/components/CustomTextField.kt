@@ -1,9 +1,11 @@
 package com.example.nimbus.components
 
-import android.service.autofill.CustomDescription
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +27,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.CadastroScreen
 import com.example.nimbus.R
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
@@ -36,13 +37,7 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     label: String? = null,
     placeholder: String,
-    leadingIcon: Painter? = null,
-    trailingIcon: Painter? = null,
-    onTrailingIconClick: (() -> Unit)? = null,
-    isPassword: Boolean = false,
-    isPasswordVisible: Boolean = false,
-    onPassVisibilityChange: (Boolean) -> Unit = {}
-
+    fraction: Float = 1f,
 ) {
     Column {
         if(label != null) {
@@ -58,7 +53,7 @@ fun CustomTextField(
             onValueChange = onValueChange,
             placeholder = { Text(text = placeholder) },
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(fraction)
                 .padding(top = 4.dp),
             shape = RoundedCornerShape(12.dp),
             singleLine = true
@@ -79,12 +74,11 @@ fun CustomTextFieldWithIcon(
         if(label != null) {
             Text(
                 text = label,
-                color = Color.White,
+                color = Color(0xFFFFEAE0),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
         }
-
         TextField(
             value = value,
             onValueChange = onValueChange,
@@ -98,7 +92,8 @@ fun CustomTextFieldWithIcon(
                 icon?.let {
                     Icon(
                         painter = painterResource(id = icon),
-                        contentDescription = iconDescription
+                        contentDescription = iconDescription,
+                        modifier = Modifier.size(25.dp)
                     )
                 }
             }
@@ -120,11 +115,12 @@ fun CustomTextFieldPassword(
     Column {
         Text(
             text = label,
-            color = Color.White,
+            color = Color(0xFFFFEAE0),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = catamaranFontFamily,
         )
+
         TextField(
             value = value,
             onValueChange = onValueChange,
@@ -137,7 +133,8 @@ fun CustomTextFieldPassword(
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.lock_icon),
-                    contentDescription = stringResource(id = R.string.lock_icon_desc)
+                    contentDescription = stringResource(id = R.string.lock_icon_desc),
+                    modifier = Modifier.size(25.dp)
                 )
             },
             trailingIcon = {
@@ -147,7 +144,8 @@ fun CustomTextFieldPassword(
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.eye_icon),
-                        contentDescription = stringResource(id = R.string.eye_icon_desc)
+                        contentDescription = stringResource(id = R.string.eye_icon_desc),
+                        modifier = Modifier.size(25.dp)
                     )
                 }
             },
@@ -156,43 +154,37 @@ fun CustomTextFieldPassword(
     }
 }
 
-//Função para exibição dos componentes
-@Composable
-fun TextFields() {
-    Column {
-        var value1 by remember { mutableStateOf("") }
-        var value2 by remember { mutableStateOf("") }
-        var value3 by remember { mutableStateOf("") }
-
-        CustomTextField(
-            value = value1,
-            onValueChange = { value1 = it },
-            label = "Label",
-            placeholder = "Placeholder"
-        )
-
-        CustomTextFieldWithIcon(
-            value = value2,
-            onValueChange = { value2 = it },
-            label = "Label",
-            placeholder = "Placeholder",
-            icon = R.drawable.envelope_icon,
-            iconDescription = stringResource(id = R.string.email_icon_desc),
-        )
-
-        CustomTextFieldPassword(
-            value = value3,
-            onValueChange = { value3 = it },
-            label = "Label",
-            placeholder = "Placeholder"
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun TextFieldsPreview() {
     NimbusTheme {
-        TextFields()
+        Column {
+            var value1 by remember { mutableStateOf("") }
+            var value2 by remember { mutableStateOf("") }
+            var value3 by remember { mutableStateOf("") }
+
+            CustomTextField(
+                value = value1,
+                onValueChange = { value1 = it },
+                label = "Label",
+                placeholder = "Placeholder"
+            )
+
+            CustomTextFieldWithIcon(
+                value = value2,
+                onValueChange = { value2 = it },
+                label = "Label",
+                placeholder = "Placeholder",
+                icon = R.drawable.envelope_icon,
+                iconDescription = stringResource(id = R.string.email_icon_desc),
+            )
+
+            CustomTextFieldPassword(
+                value = value3,
+                onValueChange = { value3 = it },
+                label = "Label",
+                placeholder = "Placeholder"
+            )
+        }
     }
 }

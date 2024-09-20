@@ -12,20 +12,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.nimbus.R
 
 @Composable
 fun MatchCard(
     challengedName: String,
-    challengedLogo: Int,
+    challengedLogo: String,
     challengerName: String,
-    challengerLogo: Int,
+    challengerLogo: String,
     dateTime: String,
     place: String
 ) {
@@ -33,8 +35,8 @@ fun MatchCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp)),
-        color = Color(0xFF212121),
-        border = BorderStroke(1.dp, Color(0xFF353434))
+        color = colorResource(id = R.color.gray_700),
+        border = BorderStroke(1.dp, colorResource(id = R.color.gray_500))
     ) {
         Row(
             modifier = Modifier
@@ -43,20 +45,20 @@ fun MatchCard(
             horizontalArrangement = Arrangement.spacedBy(18.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = challengerLogo),
+            AsyncImage(
+                model = challengedLogo,
                 contentDescription = stringResource(id = R.string.challenger_logo, challengerName),
                 modifier = Modifier.size(50.dp),
                 contentScale = ContentScale.Fit
             )
             Text(
                 text = stringResource(id = R.string.versus).toUpperCase(),
-                color = Color(0xFFFFEAE0),
+                color = colorResource(id = R.color.orange_100),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Image(
-                painter = painterResource(id = challengedLogo),
+            AsyncImage(
+                model = challengerLogo,
                 contentDescription = stringResource(id = R.string.challenged_logo, challengedName),
                 modifier = Modifier.size(50.dp),
                 contentScale = ContentScale.Fit
@@ -64,13 +66,13 @@ fun MatchCard(
             Column {
                 Text(
                     text = dateTime,
-                    color = Color(0xFFFFEAE0),
+                    color = colorResource(id = R.color.orange_100),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
                     text = place,
-                    color = Color(0xFFFFEAE0),
+                    color = colorResource(id = R.color.orange_100),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -86,8 +88,8 @@ fun MatchCardPrewiew() {
         MatchCard(
             challengerName = "Golden State Warriors",
             challengedName = "Corinthians",
-            challengerLogo = R.mipmap.gsw,
-            challengedLogo = R.mipmap.corinthians,
+            challengerLogo = "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png",
+            challengedLogo = "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
             dateTime = "10/09/2024 - 20:30",
             place = "Rua Haddock Lobo"
         )

@@ -1,6 +1,9 @@
 package com.example.nimbus.components
 
+import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,50 +18,57 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.nimbus.ui.PlayerInfomationScreen
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.R
+import com.example.nimbus.model.Athlete
 
 @Composable
-fun PlayerCard(
-    playerName: String = "João Pedro",
-    playerPosition: String = "Pivô",
-    playerImage: String = "https://s2-ge.glbimg.com/5B-_zhI6bYntSaxneldBiM-Ezxw=/33x44:650x576/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/9/V/tuqz2GRDOIBJzRWAqinQ/gettyimages-1235563907.jpg",
-    isStarting: Boolean = false,
-    isInjuried: Boolean = false
+fun AthleteCard(
+    athlete: Athlete,
 ) {
+    val context = LocalContext.current
+    val interactionSource= remember { MutableInteractionSource() }
+    val intent = Intent(context, PlayerInfomationScreen::class.java).apply {
+        putExtra("player_id", athlete.id)
+        putExtra("player_image", athlete.picture)
+    }
+
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF212121),
+            containerColor = colorResource(id = R.color.gray_700),
         ),
         modifier = Modifier
             .size(width = 165.dp, height = 220.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { context.startActivity(intent) }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(12.dp)
         ) {
-            //Image(
-            //    painter = painterResource(id = R.mipmap.jogador),
-            //    contentDescription = "jogador",
-            //    modifier = Modifier.clip(RoundedCornerShape(10.dp))
-            //)
 
             AsyncImage(
-                model = playerImage,
-                contentDescription = stringResource(id = R.string.player_image, playerName),
+                model = athlete.picture,
+                contentDescription = stringResource(id = R.string.player_image, "${athlete.firstName} ${athlete.lastName}"),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -67,8 +77,8 @@ fun PlayerCard(
 
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = playerName,
-                color = Color(0xFFFFEAE0),
+                text = "${athlete.firstName} ${athlete.lastName}",
+                color = colorResource(id = R.color.orange_100),
                 fontWeight = FontWeight.Bold,
                 fontFamily = catamaranFontFamily
             )
@@ -80,8 +90,8 @@ fun PlayerCard(
             ) {
                 Text(
                     fontSize = 12.sp,
-                    text = playerPosition,
-                    color = Color(0xFFd7d7d7),
+                    text = athlete.position,
+                    color = colorResource(id = R.color.gray_200),
                     fontFamily = poppinsFontFamily
                 )
 
@@ -91,15 +101,15 @@ fun PlayerCard(
                     var starting: Int = R.drawable.star
                     var startingDesc: Int = R.string.not_starting_icon
                     var injury: Int = R.drawable.injury
-                    var injuryDesc: Int = R.string.not_starting_icon
+                    var injuryDesc: Int = R.string.not_injuried_icon
 
-                    if(isStarting) {
+                    if(athlete.isStarting) {
                         starting = R.drawable.star_filled
-                        startingDesc = R.string.is_injuried_icon
+                        startingDesc = R.string.is_starting_icon
                     }
 
 
-                    if(isInjuried) {
+                    if(athlete.isInjuried) {
                         injury = R.drawable.injury_filled
                         injuryDesc = R.string.is_injuried_icon
                     }
@@ -107,13 +117,13 @@ fun PlayerCard(
                     Image(
                         painter = painterResource(id = starting),
                         contentDescription = stringResource(id = startingDesc),
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(20.dp)
                     )
 
                     Image(
                         painter = painterResource(id = injury),
                         contentDescription = stringResource(id = injuryDesc),
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(20.dp)
                     )
 
                 }

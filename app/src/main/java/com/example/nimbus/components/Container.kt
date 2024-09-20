@@ -1,7 +1,6 @@
 package com.example.nimbus.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,16 +10,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.ui.theme.catamaranFontFamily
-import com.example.nimbus.ui.theme.poppinsFontFamily
+import com.example.nimbus.R
 
 @Composable
 fun Container(
@@ -32,7 +31,7 @@ fun Container(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp)),
-        color = Color(0xFF212121),
+        color = colorResource(id = R.color.gray_700),
         border = BorderStroke(1.dp, Color(0xFF353434))
     ) {
         Column(
@@ -44,7 +43,7 @@ fun Container(
                 Text(
                     text = title,
                     fontSize = 14.sp,
-                    color = Color(0xFFFFEAE0),
+                    color = colorResource(id = R.color.orange_100),
                     fontWeight = FontWeight.Bold,
                     fontFamily = catamaranFontFamily
                 )

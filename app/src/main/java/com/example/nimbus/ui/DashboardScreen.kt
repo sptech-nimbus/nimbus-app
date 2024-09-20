@@ -1,27 +1,20 @@
-package com.example.nimbus
+package com.example.nimbus.ui
 
 import com.example.nimbus.components.TopNavigation
 import com.example.nimbus.components.BottomNavigation
 import com.example.nimbus.components.MatchCard
 import com.example.nimbus.components.Container
-import com.example.nimbus.components.ScreenStructure
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nimbus.R
 import com.example.nimbus.ui.theme.NimbusTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -48,7 +42,7 @@ class DashboardScreen : ComponentActivity() {
                     )
                 }
             }
-        }
+         }
     }
 }
 
@@ -75,8 +69,8 @@ fun Dashboard(modifier: Modifier = Modifier) {
             MatchCard(
                 challengerName = "Golden State Warriors",
                 challengedName = "Corinthians",
-                challengerLogo = R.mipmap.gsw,
-                challengedLogo = R.mipmap.corinthians,
+                challengerLogo = "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png",
+                challengedLogo = "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
                 dateTime = "10/09/2024 - 20:30",
                 place = "Rua Haddock Lobo"
             )
@@ -98,8 +92,7 @@ fun Dashboard(modifier: Modifier = Modifier) {
                     }
                 }
             }
-
-            Row(
+           Row(
                 //modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
@@ -113,8 +106,7 @@ fun Dashboard(modifier: Modifier = Modifier) {
                         contentDescription = ""
                     )
                 }
-
-                Container(
+              Container(
                     title = "76 pontos p/ jogo",
                     //subtitle = "Nos últimos 9 jogos",
                     modifier = Modifier.weight(1f)
@@ -125,8 +117,7 @@ fun Dashboard(modifier: Modifier = Modifier) {
                     )
                 }
             }
-
-            Container(
+           Container(
                 title = "20 rebotes por jogo"
             ) {
                 Image(

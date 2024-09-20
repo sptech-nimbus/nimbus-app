@@ -1,6 +1,5 @@
 package com.example.nimbus.components
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,17 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.nimbus.R
-import com.example.nimbus.Register1Screen
+import com.example.nimbus.model.Team
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun TeamCard(
-    teamName: String,
-    teamImage: String,
+    team: Team,
     players: Int,
-    badge: Painter? = null,
     onClick: () -> Unit
 ) {
     val interactionSource= remember { MutableInteractionSource() }
@@ -43,7 +40,7 @@ fun TeamCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp))
-            .background(Color(0xFF212121))
+            .background(colorResource(id = R.color.gray_700))
             .padding(16.dp, 20.dp)
             .clickable(
                 interactionSource = interactionSource,
@@ -53,8 +50,8 @@ fun TeamCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = teamImage,
-            contentDescription = stringResource(id = R.string.team_image_desc, teamName),
+            model = team.picture,
+            contentDescription = stringResource(id = R.string.team_image_desc, team.name),
             modifier = Modifier
                 .size(60.dp)
                 .align(Alignment.CenterVertically),
@@ -70,8 +67,8 @@ fun TeamCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = teamName,
-                    color = Color.White,
+                    text = team.name,
+                    color = colorResource(id = R.color.orange_100),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Black,
                     maxLines = 1,
@@ -81,9 +78,17 @@ fun TeamCard(
 
                 Spacer(modifier = Modifier.width(14.dp))
 
-                if(badge != null) {
+                val badgeValue = when(team.level) {
+                    1 -> R.drawable.badge_1
+                    2 -> R.drawable.badge_2
+                    3 -> R.drawable.badge_3
+                    4 -> R.drawable.badge_4
+                    else -> null
+                }
+
+                if(badgeValue != null) {
                     Image(
-                        painter = badge,
+                        painter = painterResource(id = badgeValue),
                         contentDescription = "Icon",
                         modifier = Modifier.size(30.dp),
                         contentScale = ContentScale.Fit
@@ -93,7 +98,7 @@ fun TeamCard(
 
             Text(
                 text = stringResource(id = R.string.players_amount, players),
-                color = Color(0xFF818181),
+                color = colorResource(id = R.color.gray_400),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = poppinsFontFamily,
@@ -106,11 +111,11 @@ fun TeamCard(
 @Composable
 fun CardPreview() {
     NimbusTheme {
+        val time = Team("1", "Golden State Warriors", "Sub-20", "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png", "Rua Haddock Lobo", 0)
+
         TeamCard(
-            teamName = "Golden State Warriors",
-            teamImage = "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png",
+            team = time,
             players = 20,
-            badge = painterResource(id = R.drawable.badge_4),
             onClick = {}
         )
     }

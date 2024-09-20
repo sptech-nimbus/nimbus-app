@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,8 +27,8 @@ fun Event(
 ) {
     val icon = if(type == "Partida") R.drawable.match_icon else R.drawable.trainning_icon
     val iconDesc = if(type == "Partida") "Ícone de partida" else "Ícone de treino"
-    val lineColor = if(type == "Partida") Color(0xFFFF7425) else Color(0xFF3fb03d)
-    val textColor = if(type == "Partida") Color(0xFFFFEAE0) else Color(0xFF989898)
+    val lineColor = if(type == "Partida") colorResource(id = R.color.orange_500) else colorResource(id = R.color.green)
+    val textColor = if(type == "Partida") colorResource(id = R.color.orange_100) else colorResource(id = R.color.gray_300)
 
     Row(
         modifier = Modifier
@@ -54,7 +55,7 @@ fun Event(
             Column {
                 Text(
                     text = challengerName,
-                    color = Color(0xFFFFEAE0),
+                    color = colorResource(id = R.color.orange_100),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -73,14 +74,14 @@ fun Event(
         ) {
             Text(
                 text = date,
-                color = Color(0xFFFFEAE0),
+                color = colorResource(id = R.color.orange_100),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = time,
-                color = Color(0xFFFFEAE0),
+                color = colorResource(id = R.color.orange_100),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )

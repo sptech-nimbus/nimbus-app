@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,18 +16,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.DashboardScreen
-import com.example.nimbus.EventsScreen
+import com.example.nimbus.ui.DashboardScreen
+import com.example.nimbus.ui.EventsScreen
 import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.R
-import com.example.nimbus.Register1Screen
-import com.example.nimbus.RosterScreen
+import com.example.nimbus.ui.RosterScreen
 import com.example.nimbus.ui.theme.NimbusTheme
 
 @Composable
@@ -41,7 +40,7 @@ fun BottomNavigation(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF212121))
+            .background(colorResource(id = R.color.gray_700))
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .padding(horizontal = 16.dp, vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -154,7 +153,7 @@ fun ActiveNavItem(iconRes: Int, screenName: String, iconDesc: Int) {
 
         Text(
             text = screenName,
-            color = Color(0xFFFF7425),
+            color = colorResource(id = R.color.orange_500),
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = poppinsFontFamily

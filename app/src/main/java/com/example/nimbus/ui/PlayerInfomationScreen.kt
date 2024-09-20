@@ -1,11 +1,9 @@
-package com.example.nimbus
+package com.example.nimbus.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -30,16 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.example.nimbus.R
 import com.example.nimbus.components.BottomNavigation
-import com.example.nimbus.components.Button
-import com.example.nimbus.components.Event
 import com.example.nimbus.components.TopNavigation
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
@@ -49,9 +44,14 @@ class PlayerInfomationScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
+            val playerId = intent?.getStringExtra("player_id")
+            val playerImage = intent?.getStringExtra("player_image")
+
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     PlayerInformation(
+                        playerId,
+                        playerImage,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -112,7 +112,7 @@ fun InfoLine(
 }
 
 @Composable
-fun PlayerInformation(modifier: Modifier = Modifier) {
+fun PlayerInformation(playerId: String?, playerImage: String?, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -170,9 +170,10 @@ fun PlayerInformation(modifier: Modifier = Modifier) {
                         .size(155.dp)
                         .padding(5.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.mipmap.jogador),
+                    AsyncImage(
+                        model = playerImage,
                         contentDescription = "jogador",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .clip(RoundedCornerShape(200.dp))
                             .border(width = 3.dp, color = Color(0xFF131313), shape = CircleShape)
@@ -227,6 +228,8 @@ fun PlayerInformation(modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview5() {
     NimbusTheme {
-        PlayerInformation()
+        PlayerInformation(
+            "1",
+            "https://s2-ge.glbimg.com/5B-_zhI6bYntSaxneldBiM-Ezxw=/33x44:650x576/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/9/V/tuqz2GRDOIBJzRWAqinQ/gettyimages-1235563907.jpg")
     }
 }

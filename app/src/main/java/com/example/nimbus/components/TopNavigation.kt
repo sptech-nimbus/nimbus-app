@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,7 +50,7 @@ fun TopNavigation(
                 text = screen.toUpperCase(),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFFFEAE0),
+                color = colorResource(id = R.color.orange_100),
                 fontFamily = poppinsFontFamily
             )
 
@@ -58,7 +59,7 @@ fun TopNavigation(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     text = subtext,
-                    color = Color(0xFF696969),
+                    color = colorResource(id = R.color.gray_400),
                     fontFamily = poppinsFontFamily,
                 )
             }
