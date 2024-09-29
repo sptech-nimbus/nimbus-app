@@ -9,6 +9,7 @@
     <color name="gray_700">#212121</color>
     <color name="gray_600">#242424</color>
     <color name="gray_500">#323232</color>
+    <color name="gray_placeholder">#7D7D7D</color>
     <color name="gray_400">#FF818181</color>
     <color name="gray_300">#989898</color>
     <color name="gray_200">#d7d7d7</color>

@@ -1,4 +1,4 @@
-package com.example.nimbus
+package com.example.nimbus.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

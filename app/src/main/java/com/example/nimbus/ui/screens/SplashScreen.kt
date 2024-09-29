@@ -1,4 +1,4 @@
-package com.example.nimbus.ui
+package com.example.nimbus.ui.screens
 
 import android.content.Intent
 import android.os.Bundle

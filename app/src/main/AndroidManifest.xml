@@ -16,47 +16,47 @@
         android:theme="@style/Theme.Nimbus"
         tools:targetApi="31" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.screens.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.PlayerInfomationScreen"
+            android:name=".ui.screens.PlayerInfomationScreen"
             android:exported="true"
             android:label="@string/title_activity_player_infomation_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.EventsScreen"
+            android:name=".ui.screens.EventsScreen"
             android:exported="true"
             android:label="@string/title_activity_events_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.RosterScreen"
+            android:name=".ui.screens.RosterScreen"
             android:exported="true"
             android:label="@string/title_activity_roster_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.DashboardScreen"
+            android:name=".ui.screens.DashboardScreen"
             android:exported="true"
             android:label="@string/title_activity_dashboard_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.MyTeamsScreen"
+            android:name=".ui.screens.MyTeamsScreen"
             android:exported="true"
             android:label="@string/title_activity_my_teams_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.LoginScreen"
+            android:name=".ui.screens.LoginScreen"
             android:exported="true"
             android:label="@string/title_activity_login_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.Register2Screen"
+            android:name=".ui.screens.Register2Screen"
             android:exported="true"
             android:label="@string/title_activity_register2_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.SplashScreen"
+            android:name=".ui.screens.SplashScreen"
             android:exported="true"
             android:label="Nimbus"
             android:theme="@style/Theme.Nimbus" >
@@ -67,12 +67,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.OnboardingScreen"
+            android:name=".ui.screens.OnboardingScreen"
             android:exported="true"
             android:label="@string/title_activity_onboarding_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.Register1Screen"
+            android:name=".ui.screens.Register1Screen"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Nimbus" />

@@ -1,4 +1,4 @@
-package com.example.nimbus.components
+package com.example.nimbus.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.R
+import com.example.nimbus.ui.theme.catamaranFontFamily
 
 @Composable
 fun Container(

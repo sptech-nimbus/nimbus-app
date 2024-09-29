@@ -1,44 +1,51 @@
-package com.example.nimbus.ui
+package com.example.nimbus.ui.screens
 
 import android.content.Intent
-import com.example.nimbus.components.TeamCard
-import com.example.nimbus.model.Team
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.nimbus.ui.theme.NimbusTheme
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.nimbus.GlobalData
 import com.example.nimbus.R
+import com.example.nimbus.api.RetrofitService
+import com.example.nimbus.ui.components.CustomLoading
+import com.example.nimbus.ui.components.TeamCard
+import com.example.nimbus.model.Team
+import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
-import com.example.nimbus.GlobalData
-import com.example.nimbus.RetrofitService
-import com.example.nimbus.components.CustomLoading
+import com.example.nimbus.ui.viewmodels.GlobalViewModel
+import com.example.nimbus.ui.viewmodels.MyTeamsScreenViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -47,12 +54,18 @@ class MyTeamsScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
+
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_900)
+
+            val viewModel by viewModels<MyTeamsScreenViewModel>()
+            val globalViewModel by viewModels<GlobalViewModel>()
+
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MyTeamsScreen(
-                        name = "Android",
+                    MyTeams(
+                        globalViewModel,
+                        viewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -62,9 +75,10 @@ class MyTeamsScreen : ComponentActivity() {
 }
 
 @Composable
-fun MyTeams() {
+fun MyTeams(globalViewModel: GlobalViewModel, viewModel: MyTeamsScreenViewModel, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    var isLoading by remember { mutableStateOf(true) }
+    val uiState by viewModel.uiState.collectAsState()
+    val globalUiState by globalViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -97,44 +111,8 @@ fun MyTeams() {
             fontFamily = catamaranFontFamily,
         )
 
-        //lista estatica sem a lista de jogadores
-        //val teams = listOf(
-        //    Team("1", "Golden State Warriors", "Sub-20", "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png", "Rua Haddock Lobo", 0),
-        //    Team("2", "Chigago Bulls", "Sub-20", "https://cdn.inspireuplift.com/uploads/images/seller_products/17516/1710752450_2.png", "Rua Haddock Lobo", 2),
-        //    Team("3", "Los Angeles Lakers", "Sub-20", "https://static.vecteezy.com/system/resources/previews/027/127/539/non_2x/lakers-logo-lakers-icon-transparent-free-png.png", "Rua Haddock Lobo", 3),
-        //    Team("4", "Corinthians", "Sub-20", "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png", "Rua Haddock Lobo", 4),
-        //    Team("5", "Flamengo", "Sub-20", "https://upload.wikimedia.org/wikipedia/commons/2/22/Logo_Flamengo_crest_1980-2018.png", "Rua Haddock Lobo", 5)
-        //)
-        val teams = remember { mutableStateListOf<Team>() }
-
-        LaunchedEffect(Unit) {
-            GlobalScope.launch {
-                val teamApi = RetrofitService.getTeamsApi()
-                try {
-                    val getTeams = teamApi.getAllTeams()
-
-                    if(getTeams.isSuccessful) {
-                        Log.i("api", "Resposta: ${getTeams.body()}")
-
-                        if(!getTeams.body().isNullOrEmpty()) {
-                            teams.clear()
-                            teams.addAll(getTeams.body()!!)
-                        }
-                    }
-                    else {
-                        Log.e("api", "Erro na resposta: ${getTeams.errorBody()!!.string()}")
-                    }
-                }
-                catch (e: Exception) {
-                    //tratamento de excessão
-                }
-                finally { isLoading = false }
-            }
-        }
-
         val scrollState = rememberLazyListState()
-
-        if(isLoading) { CustomLoading() }
+        if(uiState.isLoading) { CustomLoading() }
         else {
             LazyColumn(
                 modifier = Modifier
@@ -146,13 +124,13 @@ fun MyTeams() {
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 state = scrollState
             ) {
-                items(items = teams.toList()) {
+                items(items = uiState.teams.toList()) {
                     TeamCard(
                         team = it,
                         players = 10,
                         onClick = {
-                            GlobalData.selectedTeam = it
-                            context.startActivity(Intent(context, DashboardScreen::class.java))
+                            globalUiState.selectTeam(it)
+                            context.startActivity(Intent(context, MainActivity::class.java))
                         }
                     )
                 }
@@ -168,18 +146,5 @@ fun MyTeams() {
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 25.dp)
         )
-    }
-}
-
-@Composable
-fun MyTeamsScreen(name: String, modifier: Modifier = Modifier) {
-    MyTeams()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview3() {
-    NimbusTheme {
-        MyTeamsScreen("Android")
     }
 }

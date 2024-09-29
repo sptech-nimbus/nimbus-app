@@ -1,4 +1,4 @@
-package com.example.nimbus.components
+package com.example.nimbus.ui.components
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -32,11 +31,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.nimbus.ui.PlayerInfomationScreen
-import com.example.nimbus.ui.theme.catamaranFontFamily
-import com.example.nimbus.ui.theme.poppinsFontFamily
+import com.example.nimbus.GlobalData
 import com.example.nimbus.R
 import com.example.nimbus.model.Athlete
+import com.example.nimbus.ui.screens.PlayerInfomationScreen
+import com.example.nimbus.ui.theme.catamaranFontFamily
+import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun AthleteCard(
@@ -44,10 +44,7 @@ fun AthleteCard(
 ) {
     val context = LocalContext.current
     val interactionSource= remember { MutableInteractionSource() }
-    val intent = Intent(context, PlayerInfomationScreen::class.java).apply {
-        putExtra("player_id", athlete.id)
-        putExtra("player_image", athlete.picture)
-    }
+    val intent = Intent(context, PlayerInfomationScreen::class.java)
 
     Card(
         colors = CardDefaults.cardColors(
@@ -58,7 +55,10 @@ fun AthleteCard(
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
-            ) { context.startActivity(intent) }
+            ) {
+                GlobalData.selectedAthlete = athlete
+                context.startActivity(intent)
+            }
     ) {
         Column(
             modifier = Modifier

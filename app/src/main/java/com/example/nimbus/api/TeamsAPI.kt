@@ -1,4 +1,4 @@
-package com.example.nimbus
+package com.example.nimbus.api
 
 import com.example.nimbus.model.Team
 import retrofit2.Response

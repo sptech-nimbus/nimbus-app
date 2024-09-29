@@ -1,11 +1,16 @@
-package com.example.nimbus.components
+package com.example.nimbus.ui.components
 
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,20 +28,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.ui.DashboardScreen
-import com.example.nimbus.ui.EventsScreen
-import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.R
-import com.example.nimbus.ui.RosterScreen
+import com.example.nimbus.ui.screens.DashboardScreen
+import com.example.nimbus.ui.screens.EventsScreen
+import com.example.nimbus.ui.screens.RosterScreen
 import com.example.nimbus.ui.theme.NimbusTheme
+import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun BottomNavigation(
-    screen: String
+    screen: String,
+    selectedPage: Int,
+    onItemClick: (page: Int) -> Unit
 ) {
-    var screenName: String = screen
-    val context = LocalContext.current
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,70 +50,79 @@ fun BottomNavigation(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if(screenName == "Chat")
+        if(selectedPage == 0) {
             ActiveNavItem(
                 iconRes = R.drawable.chat_icon_active,
                 iconDesc = R.string.chat,
-                screenName = screenName
+                screenName = screen
             )
+        }
         else NavItem(
             iconRes = R.drawable.chat_icon,
             iconDesc = R.string.chat,
-            onClick = {}
+            onClick = { onItemClick(0) }
         )
 
-        if(screenName == "Time")
+        if(selectedPage == 1) {
             ActiveNavItem(
                 iconRes = R.drawable.team_icon_active,
                 iconDesc = R.string.team,
-                screenName = screenName
+                screenName = screen
             )
+        }
         else NavItem(
             iconRes = R.drawable.team_icon,
             iconDesc = R.string.team,
-            onClick = { context.startActivity(Intent(context, RosterScreen::class.java)) }
+            onClick = { onItemClick(1) }
         )
 
-        if(screenName == "Home")
+        if(selectedPage == 2) {
             ActiveNavItem(
                 iconRes = R.drawable.house_icon_active,
                 iconDesc = R.string.home,
-                screenName = screenName
+                screenName = screen
             )
+        }
         else NavItem(
             iconRes = R.drawable.house_icon,
             iconDesc = R.string.home,
-            onClick = { context.startActivity(Intent(context, DashboardScreen::class.java)) }
+            onClick = { onItemClick(2) }
         )
 
-        if(screenName == "Eventos")
+        if(selectedPage == 3) {
             ActiveNavItem(
                 iconRes = R.drawable.calender_icon_active,
                 iconDesc = R.string.events,
-                screenName = screenName
+                screenName = screen
             )
+        }
         else NavItem(
             iconRes = R.drawable.calender_icon,
             iconDesc = R.string.events,
-            onClick = { context.startActivity(Intent(context, EventsScreen::class.java)) }
+            onClick = { onItemClick(3) }
         )
 
-        if(screenName == "Conta")
+        if(selectedPage == 4) {
             ActiveNavItem(
                 iconRes = R.drawable.user_icon_active,
                 iconDesc = R.string.account,
-                screenName = screenName
+                screenName = screen
             )
+        }
         else NavItem(
             iconRes = R.drawable.user_icon,
             iconDesc = R.string.account,
-            onClick = {}
+            onClick = { onItemClick(5) }
         )
     }
 }
 
 @Composable
-fun NavItem(iconRes: Int, iconDesc: Int, onClick: () -> Unit) {
+fun NavItem(
+    iconRes: Int,
+    iconDesc: Int,
+    onClick: () -> Unit
+) {
     val interactionSource= remember { MutableInteractionSource() }
 
     Image(
@@ -158,19 +171,5 @@ fun ActiveNavItem(iconRes: Int, screenName: String, iconDesc: Int) {
             fontWeight = FontWeight.Medium,
             fontFamily = poppinsFontFamily
         )
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun BottomNavigationPreview() {
-    NimbusTheme {
-        Column {
-            BottomNavigation(screen = stringResource(id = R.string.chat))
-            BottomNavigation(screen = stringResource(id = R.string.team))
-            BottomNavigation(screen = stringResource(id = R.string.home))
-            BottomNavigation(screen = stringResource(id = R.string.events))
-            BottomNavigation(screen = stringResource(id = R.string.account))
-        }
     }
 }
