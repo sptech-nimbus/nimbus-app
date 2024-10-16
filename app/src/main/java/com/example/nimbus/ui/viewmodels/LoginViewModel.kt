@@ -63,8 +63,6 @@ class LoginViewModel : ViewModel() {
     fun saveUserData(context: Context, userData: UserLoginResponseDTO?) {
         val sharedPref = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
 
-        Log.i("Login save","Na função de salvar: $userData")
-
         with(sharedPref.edit()) {
             putString("user_id", userData?.userId.toString())
             putString("persona_id", userData?.personaId.toString())
@@ -73,10 +71,6 @@ class LoginViewModel : ViewModel() {
             putString("email", userData?.email)
             apply()
         }
-
-        val username = sharedPref.getString("username", null) ?: "Indefinido"
-
-        Log.i("Login pós save", "Valor do token $username")
     }
 
     fun onEmailChange(text: String) { _uiState.value = _uiState.value.copy( email = text ) }
