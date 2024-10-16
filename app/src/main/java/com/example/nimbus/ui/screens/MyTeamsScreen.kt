@@ -1,6 +1,8 @@
 package com.example.nimbus.ui.screens
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -35,7 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.GlobalData
 import com.example.nimbus.R
 import com.example.nimbus.api.RetrofitService
 import com.example.nimbus.ui.components.CustomLoading
@@ -75,10 +76,17 @@ class MyTeamsScreen : ComponentActivity() {
 }
 
 @Composable
-fun MyTeams(globalViewModel: GlobalViewModel, viewModel: MyTeamsScreenViewModel, modifier: Modifier = Modifier) {
+fun MyTeams(
+    globalViewModel: GlobalViewModel,
+    viewModel: MyTeamsScreenViewModel,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
-    val globalUiState by globalViewModel.uiState.collectAsState()
+
+    val sharedPref = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+    val username = sharedPref.getString("username", null) ?: "Indefinido"
+
 
     Column(
         modifier = Modifier
@@ -95,7 +103,7 @@ fun MyTeams(globalViewModel: GlobalViewModel, viewModel: MyTeamsScreenViewModel,
         )
 
         Text(
-            text = "Yuri Oliveira",
+            text = username,
             color = Color(0xFFFF7425),
             fontSize = 36.sp,
             fontWeight = FontWeight.Black,
@@ -129,15 +137,16 @@ fun MyTeams(globalViewModel: GlobalViewModel, viewModel: MyTeamsScreenViewModel,
                         team = it,
                         players = 10,
                         onClick = {
-                            globalUiState.selectTeam(it)
+                            globalViewModel.selectTeam(it)
                             context.startActivity(Intent(context, MainActivity::class.java))
                         }
                     )
                 }
             }
         }
+
         Text(
-            text = "Sair",
+            text = "Adicionar time",
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Black,

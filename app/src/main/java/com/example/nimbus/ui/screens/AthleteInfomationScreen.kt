@@ -3,8 +3,12 @@ package com.example.nimbus.ui.screens
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,25 +24,31 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.nimbus.GlobalData
 import com.example.nimbus.R
 import com.example.nimbus.ui.components.BottomNavigation
-import com.example.nimbus.ui.components.TopNavigation
+import com.example.nimbus.ui.components.DeleteDialog
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
-import kotlinx.coroutines.launch
+import com.example.nimbus.ui.viewmodels.GlobalViewModel
 
 class PlayerInfomationScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +57,11 @@ class PlayerInfomationScreen : ComponentActivity() {
         setContent {
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_700)
+            val globalViewModel by viewModels<GlobalViewModel>()
 
             NimbusTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { TopNavigation(screen = stringResource(id = R.string.info)) },
                     bottomBar = {
                         BottomNavigation(
                             selectedPage = 1,
@@ -60,7 +70,10 @@ class PlayerInfomationScreen : ComponentActivity() {
                         )
                     }
                 ) { innerPadding ->
-                    PlayerInformation(modifier = Modifier.padding(innerPadding))
+                    PlayerInformation(
+                        globalViewModel = globalViewModel,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
@@ -123,15 +136,38 @@ fun InfoLine(
 }
 
 @Composable
-fun PlayerInformation(modifier: Modifier = Modifier) {
+fun PlayerInformation(
+    globalViewModel: GlobalViewModel,
+    modifier: Modifier = Modifier,
+    onPageClick: (athletePage: Int) -> Unit = {},
+    onDeleteClick: () -> Unit = {},
+) {
+    val uiState by globalViewModel.uiState.collectAsState()
+    var isDialogOpen by rememberSaveable { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxSize(1f)
-            .padding(20.dp)
+            .padding(20.dp, 0.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val athleteName = "${GlobalData.selectedAthlete?.firstName} ${GlobalData.selectedAthlete?.lastName}"
+        val athleteName =
+            "${uiState.selectedAthlete?.firstName} ${uiState.selectedAthlete?.lastName}"
+
+        if (isDialogOpen) {
+            DeleteDialog(
+                athleteName = athleteName,
+                onDismissButton = {
+                    isDialogOpen = false
+                },
+                onConfirmButton = {
+                    isDialogOpen = false
+                    onPageClick(0)
+                }
+            )
+        }
+
         Text(
             text = athleteName.toUpperCase(),
             fontWeight = FontWeight.Black,
@@ -147,7 +183,7 @@ fun PlayerInformation(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Column(
-                modifier= Modifier.weight(1f),
+                modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
@@ -172,7 +208,7 @@ fun PlayerInformation(modifier: Modifier = Modifier) {
                     .padding(5.dp)
             ) {
                 AsyncImage(
-                    model = GlobalData.selectedAthlete?.picture,
+                    model = uiState.selectedAthlete?.picture,
                     contentDescription = "jogador",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -183,7 +219,7 @@ fun PlayerInformation(modifier: Modifier = Modifier) {
             }
 
             Column(
-                modifier= Modifier.weight(1f),
+                modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
@@ -208,24 +244,104 @@ fun PlayerInformation(modifier: Modifier = Modifier) {
                 .padding(top = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            InfoLine(label = stringResource(id = R.string.starting), info = "Sim")
-            InfoLine(label = stringResource(id = R.string.position), info = GlobalData.selectedAthlete?.position)
+            val isStarting = if (uiState.selectedAthlete?.isStarting == true) "Sim" else "Não"
+
+            InfoLine(label = stringResource(id = R.string.starting), info = isStarting)
+            InfoLine(
+                label = stringResource(id = R.string.position),
+                info = uiState.selectedAthlete?.position
+            )
             InfoLine(label = stringResource(id = R.string.age), info = "19 anos")
-            InfoLine(label = stringResource(id = R.string.category), info = GlobalData.selectedAthlete?.category)
+            InfoLine(
+                label = stringResource(id = R.string.category),
+                info = uiState.selectedAthlete?.category
+            )
             InfoLine(label = stringResource(id = R.string.birth_date_short), info = "10/10/2004")
             InfoLine(label = stringResource(id = R.string.phone) + " 1", info = "(11) 99999-9999")
-            InfoLine(label = stringResource(id = R.string.phone) + " 2", info = "Indefinido")
-            InfoLine(label = stringResource(id = R.string.email), info = stringResource(id = R.string.email_placeholder))
-            InfoLine(label = stringResource(id = R.string.address), info = "Rua Haddock Lobo, 525...")
+            InfoLine(
+                label = stringResource(id = R.string.email),
+                info = stringResource(id = R.string.email_placeholder)
+            )
+            InfoLine(
+                label = stringResource(id = R.string.address),
+                info = "Rua Haddock Lobo, 525..."
+            )
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val interactionSource = remember { MutableInteractionSource() }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        isDialogOpen = true
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.thrash),
+                        contentDescription = null,
+                        Modifier.size(30.dp)
+                    )
+                    Text(
+                        text = "Excluir",
+                        color = colorResource(id = R.color.orange_100),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        onPageClick(2)
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.stats),
+                        contentDescription = null,
+                        Modifier.size(30.dp)
+                    )
+                    Text(
+                        text = "Estatísticas",
+                        color = colorResource(id = R.color.orange_100),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        onPageClick(3)
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.bandaids_orange),
+                        contentDescription = null,
+                        Modifier.size(30.dp)
+                    )
+                    Text(
+                        text = "Lesões",
+                        color = colorResource(id = R.color.orange_100),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
 
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview5() {
-    NimbusTheme {
-        PlayerInformation()
     }
 }

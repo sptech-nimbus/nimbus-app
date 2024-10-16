@@ -1,8 +1,10 @@
 package com.example.nimbus.model
 
+import java.time.LocalDate
+
 data class Injury(
     val id: String,
     val type: String,
-    val initialDate: String,
-    val finaldate: String
+    val initialDate: LocalDate,
+    val finalDate: LocalDate
 )

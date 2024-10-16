@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,18 +40,25 @@ import com.example.nimbus.ui.components.Button
 import com.example.nimbus.ui.components.CustomTextFieldPassword
 import com.example.nimbus.ui.components.CustomTextFieldWithIcon
 import com.example.nimbus.ui.theme.NimbusTheme
+import com.example.nimbus.ui.viewmodels.LoginUiState
+import com.example.nimbus.ui.viewmodels.LoginViewModel
 
 class LoginScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
+
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_900)
+
+            val viewModel by viewModels<LoginViewModel>()
+
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Login(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        viewModel
                     )
                 }
             }
@@ -58,7 +67,7 @@ class LoginScreen : ComponentActivity() {
 }
 
 @Composable
-fun Login(modifier: Modifier = Modifier) {
+fun Login(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
     val context = LocalContext.current
 
     Column(
@@ -97,7 +106,7 @@ fun Login(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(31.dp))
 
-        LoginForm(context)
+        LoginForm(context, viewModel)
 
         Spacer(modifier = Modifier.height(35.dp))
 
@@ -126,16 +135,15 @@ fun Login(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoginForm(context: Context) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginForm(context: Context, viewModel: LoginViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         CustomTextFieldWithIcon(
-            value = email,
-            onValueChange = { email = it },
+            value = uiState.email,
+            onValueChange = { viewModel.onEmailChange(it) },
             label = stringResource(id = R.string.add_email),
             icon = R.drawable.envelope_icon,
             iconDescription = stringResource(id = R.string.email_icon_desc),
@@ -145,8 +153,8 @@ fun LoginForm(context: Context) {
         Spacer(modifier = Modifier.height(30.dp))
 
         CustomTextFieldPassword(
-            value = password,
-            onValueChange = { password = it },
+            value = uiState.password,
+            onValueChange = { viewModel.onPasswordChange(it) },
             label = stringResource(id = R.string.add_email),
             placeholder = stringResource(id = R.string.password_placeholder)
         )
@@ -156,15 +164,7 @@ fun LoginForm(context: Context) {
         Button(
             text = stringResource(id = R.string.login),
             fontSize = 24,
-            onClick = { context.startActivity(Intent(context, MyTeamsScreen::class.java)) }
+            onClick = { viewModel.login(context) }
         )
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview2() {
-    NimbusTheme {
-        Login()
     }
 }

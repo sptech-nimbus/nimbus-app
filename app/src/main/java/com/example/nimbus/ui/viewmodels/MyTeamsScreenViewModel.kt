@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import android.util.Log
 
 data class MyTeamsScreenUiState(
     val isLoading: Boolean = true,
@@ -29,8 +30,8 @@ class MyTeamsScreenViewModel() : ViewModel() {
                 val teamsApi = RetrofitService.getTeamsApi()
                 val response = teamsApi.getAllTeams()
 
-                if(response.isSuccessful && !response.body().isNullOrEmpty()) {
-                    _uiState.value = response.body()?.let {
+                if(response.isSuccessful && !response.body()?.data.isNullOrEmpty()) {
+                    _uiState.value = response.body()?.data?.let {
                         _uiState.value.copy(
                             teams = it,
                         )
@@ -40,12 +41,14 @@ class MyTeamsScreenViewModel() : ViewModel() {
                     _uiState.value = _uiState.value.copy(
                         error = "Erro na resposta: ${response.errorBody()?.string()}"
                     )
+                    Log.d("TeamsAPI", "Erro na resposta: ${response.errorBody()?.string()}")
                 }
             }
             catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = "Falha na requisição: ${e.message}"
                 )
+                Log.e("TeamsAPI", "Erro na requisição", e)
             }
             finally {
                 _uiState.value = uiState.value.copy(isLoading = false)

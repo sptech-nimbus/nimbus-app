@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.nimbus.GlobalData
 import com.example.nimbus.R
 import com.example.nimbus.model.Athlete
 import com.example.nimbus.ui.screens.PlayerInfomationScreen
@@ -41,10 +40,9 @@ import com.example.nimbus.ui.theme.poppinsFontFamily
 @Composable
 fun AthleteCard(
     athlete: Athlete,
+    onAthleteClick: () -> Unit
 ) {
-    val context = LocalContext.current
     val interactionSource= remember { MutableInteractionSource() }
-    val intent = Intent(context, PlayerInfomationScreen::class.java)
 
     Card(
         colors = CardDefaults.cardColors(
@@ -56,8 +54,7 @@ fun AthleteCard(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                GlobalData.selectedAthlete = athlete
-                context.startActivity(intent)
+                onAthleteClick()
             }
     ) {
         Column(
@@ -80,7 +77,8 @@ fun AthleteCard(
                 text = "${athlete.firstName} ${athlete.lastName}",
                 color = colorResource(id = R.color.orange_100),
                 fontWeight = FontWeight.Bold,
-                fontFamily = catamaranFontFamily
+                fontFamily = catamaranFontFamily,
+                maxLines = 1
             )
 
             Row(

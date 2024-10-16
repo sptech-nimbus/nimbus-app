@@ -1,5 +1,6 @@
 package com.example.nimbus.ui.screens
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,14 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.nimbus.GlobalData
 import com.example.nimbus.R
 import com.example.nimbus.ui.components.BottomNavigation
 import com.example.nimbus.ui.components.TopNavigation
 import com.example.nimbus.ui.ui.theme.NimbusTheme
+import com.example.nimbus.ui.viewmodels.AthleteInjuryScreenViewModel
 import com.example.nimbus.ui.viewmodels.GlobalViewModel
+import com.example.nimbus.ui.viewmodels.MyTeamsScreenViewModel
 import com.example.nimbus.ui.viewmodels.RosterScreenViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -41,16 +44,31 @@ class MainActivity : ComponentActivity() {
             window.navigationBarColor = getColor(R.color.gray_700)
 
             val pagerState = rememberPagerState(initialPage = 2) {5}
+            val athletePagerState = rememberPagerState() {3}
             val coroutineScope = rememberCoroutineScope()
+            val context = LocalContext.current
 
             NimbusTheme {
                 val globalViewModel by viewModels<GlobalViewModel>()
                 val rosterViewModel by viewModels<RosterScreenViewModel>()
-                val uiState by globalViewModel.uiState.collectAsState()
+                val athleteInjuryViewModel by viewModels<AthleteInjuryScreenViewModel>()
+                val myTeamsViewModel by viewModels<MyTeamsScreenViewModel>()
+                val sharedPref = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { TopNavigation(stringResource(id = R.string.home), subtext = uiState.selectedTeam?.name) },
+                    topBar = {
+                        TopNavigation(
+                            selectedPage = pagerState.currentPage,
+                            globalViewModel = globalViewModel,
+                            athletePage = athletePagerState.currentPage,
+                            onBackClick = { page ->
+                                coroutineScope.launch {
+                                    athletePagerState.animateScrollToPage(page)
+                                }
+                            }
+                        )
+                     },
                     bottomBar = {
                     BottomNavigation(
                         screen = stringResource(id = R.string.events),
@@ -66,21 +84,41 @@ class MainActivity : ComponentActivity() {
                     HorizontalPager(pagerState, Modifier.padding(innerPadding)) { page ->
                         when(page) {
                             0 -> Chat()
-                            1 -> Roster(globalViewModel, rosterViewModel)
+                            1 -> {
+                                HorizontalPager(
+                                    state = athletePagerState,
+                                    userScrollEnabled = false
+                                ) { page2 ->
+                                    when(page2) {
+                                        0 -> Roster(
+                                            globalViewModel,
+                                            rosterViewModel,
+                                            onAthleteClick = { athletePage ->
+                                                coroutineScope.launch {
+                                                    athletePagerState.animateScrollToPage(athletePage)
+                                                }
+                                            }
+                                        )
+                                        1 -> PlayerInformation(
+                                            globalViewModel,
+                                            onPageClick = { athletePage ->
+                                                coroutineScope.launch {
+                                                    athletePagerState.animateScrollToPage(athletePage)
+                                                }
+                                            })
+                                        2 -> AthleteInjuryScreen(globalViewModel, athleteInjuryViewModel)
+                                    }
+                                }
+                            }
                             2 -> Dashboard()
                             3 -> Events()
-                            4 -> Profile()
+                            4 -> Profile(globalViewModel, myTeamsViewModel)
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun MainActivity(modifier: Modifier = Modifier) {
-    Text(text = "Olá")
 }
 
 @Preview(showBackground = true)

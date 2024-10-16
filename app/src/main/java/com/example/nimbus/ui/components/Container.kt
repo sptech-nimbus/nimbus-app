@@ -26,12 +26,13 @@ fun Container(
     title: String? = null,
     subtitle: String? = null,
     modifier: Modifier = Modifier,
+    color: Color = colorResource(id = R.color.gray_700),
     content: @Composable () -> Unit,
 ) {
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp)),
-        color = colorResource(id = R.color.gray_700),
+        color = color,
         border = BorderStroke(1.dp, Color(0xFF353434))
     ) {
         Column(

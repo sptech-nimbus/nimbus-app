@@ -34,6 +34,7 @@ import com.example.nimbus.model.Team
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
+import java.util.UUID
 
 @Composable
 fun TeamCard(
@@ -117,7 +118,7 @@ fun TeamCard(
 @Composable
 fun CardPreview() {
     NimbusTheme {
-        val time = Team("1", "Golden State Warriors", "Sub-20", "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png", "Rua Haddock Lobo", 0)
+        val time = Team(UUID.randomUUID(), "Golden State Warriors", "Sub-20", "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png", "Rua Haddock Lobo", 0)
 
         TeamCard(
             team = time,

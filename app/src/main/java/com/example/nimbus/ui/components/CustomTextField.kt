@@ -1,19 +1,15 @@
 package com.example.nimbus.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -237,7 +233,9 @@ fun Long.toBrazilianDateFormat(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDocked(
-    label: String
+    label: String,
+    fraction: Float = 1f,
+    onValueChange: (Long?) -> Unit?
 ) {
     val focusManager = LocalFocusManager.current
     var showDatePickerDialog by remember {
@@ -258,6 +256,8 @@ fun DatePickerDocked(
                         text = stringResource(id = R.string.pick_date),
                         fontSize = 20,
                         onClick = {
+                            onValueChange(datePickerState.selectedDateMillis)
+
                             datePickerState
                                 .selectedDateMillis?.let { millis ->
                                     selectedDate = millis.toBrazilianDateFormat()
@@ -298,6 +298,7 @@ fun DatePickerDocked(
         placeholder = "dd/mm/aaaa",
         readOnly = true,
         traillingIcon = R.drawable.calender_icon,
+        fraction = fraction,
         modifier = Modifier
             .onFocusEvent {
                 if (it.isFocused) {

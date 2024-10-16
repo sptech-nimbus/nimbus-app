@@ -8,21 +8,42 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.nimbus.R
+import com.example.nimbus.api.game1
+import com.example.nimbus.api.team1
 import com.example.nimbus.ui.components.BottomNavigation
 import com.example.nimbus.ui.components.Container
 import com.example.nimbus.ui.components.MatchCard
+import com.example.nimbus.ui.components.PendingResult
+import com.example.nimbus.ui.components.StatCard
 import com.example.nimbus.ui.components.TopNavigation
 import com.example.nimbus.ui.theme.NimbusTheme
+import com.example.nimbus.ui.theme.catamaranFontFamily
+import com.example.nimbus.ui.theme.poppinsFontFamily
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -40,7 +61,6 @@ class DashboardScreen : ComponentActivity() {
             NimbusTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { TopNavigation(screen = stringResource(id = R.string.my_team), subtext = currentDate.toString()) },
                     //bottomBar = { BottomNavigation(screen = stringResource(id = R.string.home)) },
                 ) { innerPadding ->
                     Dashboard( modifier = Modifier.padding(innerPadding) )
@@ -50,72 +70,154 @@ class DashboardScreen : ComponentActivity() {
     }
 }
 
+data class StatItem(
+    val label: String,
+    val value: String,
+    val subvalue: String? = null
+)
+
 @Composable
 fun Dashboard(modifier: Modifier = Modifier) {
+    val statsList = listOf(
+        StatItem("Vitórias", "32"),
+        StatItem("Pontos", "92.5"),
+        StatItem("Rebotes", "30.2"),
+        StatItem("Faltas", "12.3"),
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
-        MatchCard(
-            challengerName = "Golden State Warriors",
-            challengedName = "Corinthians",
-            challengerLogo = "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png",
-            challengedLogo = "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
-            dateTime = "10/09/2024 - 20:30",
-            place = "Rua Haddock Lobo"
-        )
-
-        Container(
-            title = "Partidas jogadas"
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            AsyncImage(
+                model = "https://upload.wikimedia.org/wikipedia/en/thumb/e/ed/Los_Angeles_Clippers_%282024%29.svg/1200px-Los_Angeles_Clippers_%282024%29.svg.png",
+                contentDescription = stringResource(id = R.string.challenger_logo, "Golden State Warriors"),
+                modifier = Modifier.size(80.dp),
+                contentScale = ContentScale.Fit
+            )
+            
+            Column(
+                verticalArrangement = Arrangement.Center,
             ) {
-                Column(
-                    modifier = Modifier.padding(50.dp, 0.dp)
+                Text(
+                    text = "Golden State Warriors",
+                    fontSize = 22.sp,
+                    color = colorResource(id = R.color.orange_100),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = catamaranFontFamily
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    Text(
+                        text = "Conquistador",
+                        color = colorResource(id = R.color.orange_100),
+                        fontFamily = catamaranFontFamily
+                    )
+
                     Image(
-                        painter = painterResource(id = R.drawable.pie_chart),
-                        contentDescription = ""
+                        painter = painterResource(id = R.drawable.badge_3),
+                        contentDescription = "",
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
         }
-       Row(
-            //modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            Container (
-                title = "20 faltas p/ jogo",
-                //subtitle = "Nos últimos 9 jogos",
-                modifier = Modifier.weight(1f)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.line_chart),
-                    contentDescription = ""
+
+        val scrollState = rememberLazyListState()
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Column {
+                Text(
+                    text = "Estatísticas",
+                    fontFamily = poppinsFontFamily,
+                    color = colorResource(id = R.color.gray_400),
+                    fontWeight = FontWeight.Medium
                 )
-            }
-          Container(
-                title = "76 pontos p/ jogo",
-                //subtitle = "Nos últimos 9 jogos",
-                modifier = Modifier.weight(1f)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.line_chart2),
-                    contentDescription = ""
-                )
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(15.dp),
+                    state = scrollState,
+                    modifier = Modifier.drawFadingEdgesHorizontal(scrollState)
+                ) {
+                    items(items = statsList.toList()) {
+                        StatCard(label = it.label, value = it.value)
+                    }
+                }
             }
         }
-       Container(
-            title = "20 rebotes por jogo"
+
+        MatchCard(
+            adversaryName = "Los Angeles Clippers",
+            adversaryLogo = "https://upload.wikimedia.org/wikipedia/en/thumb/e/ed/Los_Angeles_Clippers_%282024%29.svg/1200px-Los_Angeles_Clippers_%282024%29.svg.png",
+            dateTime = "10/09/2024 - 20:30",
+            place = "Rua Haddock Lobo"
+        )
+
+        PendingResult(
+            adversaryTeam = team1,
+            onConfirmClick = { /*TODO*/ },
+            onDismissClick = { /*TODO*/ },
+            isChallenger = true,
+            game = game1
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.bar_chat),
-                contentDescription = ""
-            )
+            Container(
+                modifier = Modifier.width(160.dp).clip(RoundedCornerShape(20.dp)),
+                color = colorResource(id = R.color.orange_500)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.basketball),
+                        contentDescription = null,
+                        tint = colorResource(id = R.color.orange_100)
+                    )
+                    Text(
+                        text = "Jogar partida",
+                        color = colorResource(id = R.color.orange_100),
+                        fontFamily = catamaranFontFamily,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Container(
+                modifier = Modifier.width(160.dp).clip(RoundedCornerShape(20.dp)),
+                color = colorResource(id = R.color.orange_500)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.robot),
+                        contentDescription = null,
+                        tint = colorResource(id = R.color.orange_100)
+                    )
+                    Text(
+                        text = "Analise por IA",
+                        color = colorResource(id = R.color.orange_100),
+                        fontFamily = catamaranFontFamily,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
     }
 }

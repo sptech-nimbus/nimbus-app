@@ -9,11 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 data class GlobalUiState(
     val selectedTeam: Team? = null,
-    val selectedAthlete: Athlete? = null,
-    val selectTeam: (Team) -> Unit = {},
-    val selectAthlete: (Athlete) -> Unit = {},
-    val removeTeam: (Team) -> Unit = {},
-    val removeAthlete: (Athlete) -> Unit = {}
+    val selectedAthlete: Athlete? = null
 )
 
 class GlobalViewModel : ViewModel() {
@@ -21,10 +17,10 @@ class GlobalViewModel : ViewModel() {
     val uiState: StateFlow<GlobalUiState> = _uiState.asStateFlow()
 
     fun selectTeam(team: Team) { _uiState.value = _uiState.value.copy(selectedTeam = team) }
-
+    fun getSelectedTeam(): Team? { return _uiState.value.selectedTeam }
     fun removeTeam() { _uiState.value = _uiState.value.copy(selectedTeam = null) }
 
-    fun selectAthlete(athlete: Athlete) { _uiState.value.copy(selectedAthlete = athlete) }
+    fun selectAthlete(athlete: Athlete) { _uiState.value = _uiState.value.copy(selectedAthlete = athlete) }
 
     fun removeAthlete() { _uiState.value = _uiState.value.copy(selectedAthlete = null) }
 }

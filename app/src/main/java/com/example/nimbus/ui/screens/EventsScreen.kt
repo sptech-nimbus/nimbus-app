@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.R
-import com.example.nimbus.ui.components.BottomNavigation
 import com.example.nimbus.ui.components.Button
 import com.example.nimbus.ui.components.CustomTextField
 import com.example.nimbus.ui.components.CustomTextFieldWithIcon
@@ -55,8 +54,6 @@ class EventsScreen : ComponentActivity() {
             NimbusTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { TopNavigation(screen = stringResource(id = R.string.my_team), subtext = "Golden State Warriors") },
-                    //bottomBar = { BottomNavigation(screen = stringResource(id = R.string.events)) },
                     content = { innerPadding -> Events(modifier = Modifier.padding(innerPadding)) }
                 )
             }
@@ -96,7 +93,6 @@ fun Events(modifier: Modifier = Modifier) {
 
                     var challengedTeam by remember { mutableStateOf("") }
                     var local by remember { mutableStateOf("") }
-                    var date by remember { mutableStateOf("") }
                     var start by remember { mutableStateOf("") }
                     var end by remember { mutableStateOf("") }
 
@@ -116,7 +112,7 @@ fun Events(modifier: Modifier = Modifier) {
                         placeholder = "Rua 123..."
                     )
 
-                    DatePickerDocked(label = stringResource(id = R.string.date))
+                    DatePickerDocked(label = stringResource(id = R.string.date), onValueChange = {})
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),

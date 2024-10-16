@@ -89,6 +89,9 @@
     <string name="add_event">Adicionar novo evento</string>
     <string name="select_category">Selecionar categoria</string>
     <string name="pick_date">Escolher data</string>
+    <string name="delete_athlete_title">Excluir jogador?</string>
+    <string name="delete_athlete_text">Deseja excluir o jogador %1$s do time?</string>
+    <string name="pending_result">Resultado pendente</string>
 
     <!-- ACTIVITIES -->
     <string name="title_activity_splash_screen">SplashScreen</string>

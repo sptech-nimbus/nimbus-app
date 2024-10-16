@@ -23,13 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.nimbus.R
+import com.example.nimbus.ui.theme.catamaranFontFamily
+import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun MatchCard(
-    challengedName: String,
-    challengedLogo: String,
-    challengerName: String,
-    challengerLogo: String,
+    adversaryName: String,
+    adversaryLogo: String,
     dateTime: String,
     place: String
 ) {
@@ -44,40 +44,43 @@ fun MatchCard(
             modifier = Modifier
                 .padding(10.dp, 16.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(18.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             AsyncImage(
-                model = challengedLogo,
-                contentDescription = stringResource(id = R.string.challenger_logo, challengerName),
-                modifier = Modifier.size(50.dp),
-                contentScale = ContentScale.Fit
-            )
-            Text(
-                text = stringResource(id = R.string.versus).toUpperCase(),
-                color = colorResource(id = R.color.orange_100),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-            AsyncImage(
-                model = challengerLogo,
-                contentDescription = stringResource(id = R.string.challenged_logo, challengedName),
-                modifier = Modifier.size(50.dp),
+                model = adversaryLogo,
+                contentDescription = stringResource(id = R.string.challenger_logo, adversaryName),
+                modifier = Modifier.size(70.dp),
                 contentScale = ContentScale.Fit
             )
             Column {
-                Text(
-                    text = dateTime,
-                    color = colorResource(id = R.color.orange_100),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = place,
-                    color = colorResource(id = R.color.orange_100),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+
+
+                Column {
+                    Text(
+                        text = "Próxima partida contra...",
+                        color = colorResource(id = R.color.orange_100),
+                        fontSize = 13.sp,
+                        fontFamily = poppinsFontFamily
+                    )
+
+                    Text(
+                        text = adversaryName,
+                        color = colorResource(id = R.color.orange_500),
+                        fontFamily = catamaranFontFamily,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Black,
+                        lineHeight = 20.sp
+                    )
+
+                    Text(
+                        text = dateTime,
+                        color = colorResource(id = R.color.gray_placeholder),
+                        lineHeight = 8.sp,
+                        fontFamily = poppinsFontFamily,
+                        fontSize = 14.sp
+                    )
+                }
             }
         }
     }
@@ -88,10 +91,8 @@ fun MatchCard(
 fun MatchCardPrewiew() {
     Column {
         MatchCard(
-            challengerName = "Golden State Warriors",
-            challengedName = "Corinthians",
-            challengerLogo = "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png",
-            challengedLogo = "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
+            adversaryName = "Corinthians",
+            adversaryLogo = "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
             dateTime = "10/09/2024 - 20:30",
             place = "Rua Haddock Lobo"
         )

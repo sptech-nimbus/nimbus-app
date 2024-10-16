@@ -1,7 +1,9 @@
 package com.example.nimbus.model
 
+import java.util.UUID
+
 data class Team(
-    val id: String,
+    val id: UUID,
     val name: String,
     val category: String?,
     val picture: String?,

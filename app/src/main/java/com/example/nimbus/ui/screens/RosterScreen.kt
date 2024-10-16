@@ -37,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.nimbus.GlobalData
 import com.example.nimbus.R
 import com.example.nimbus.api.RetrofitService
 import com.example.nimbus.ui.components.AthleteCard
@@ -67,13 +66,13 @@ class RosterScreen : ComponentActivity() {
             NimbusTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { TopNavigation(screen = stringResource(id = R.string.my_team), subtext = globalUiState.selectedTeam?.name) },
                     //bottomBar = { BottomNavigation(screen = stringResource(id = R.string.team)) },
                 ) { innerPadding ->
                     Roster(
                         globalViewModel,
                         viewModel,
-                        Modifier.padding(innerPadding)
+                        Modifier.padding(innerPadding),
+                        {}
                     )
                 }
             }
@@ -85,7 +84,8 @@ class RosterScreen : ComponentActivity() {
 fun Roster(
     globalViewModel: GlobalViewModel,
     viewModel: RosterScreenViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAthleteClick: (athletePage: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -123,7 +123,14 @@ fun Roster(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        rowItems.forEach { AthleteCard(it) }
+                        rowItems.forEach {
+                            AthleteCard(
+                                it
+                            ) {
+                                onAthleteClick(1)
+                                globalViewModel.selectAthlete(it)
+                            }
+                        }
                     }
                 }
             }
@@ -161,6 +168,43 @@ fun Modifier.drawFadingEdges(
                         colors = listOf(Color.Black, Color.Transparent),
                         startY = size.height - bottomEdgeHeightPx,
                         endY = size.height,
+                    ),
+                    blendMode = BlendMode.DstIn,
+                )
+            }
+        }
+)
+
+fun Modifier.drawFadingEdgesHorizontal(
+    scrollableState: ScrollableState,
+    startEdgeWidth: Dp = 18.dp,
+    endEdgeWidth: Dp = 18.dp,
+) = then(
+    Modifier
+        .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+        .drawWithContent {
+            drawContent()
+
+            val startEdgeWidthPx = startEdgeWidth.toPx()
+            val endEdgeWidthPx = endEdgeWidth.toPx()
+
+            if (scrollableState.canScrollBackward && startEdgeWidthPx >= 1f) {
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color.Transparent, Color.Black),
+                        startX = 0f,
+                        endX = startEdgeWidthPx,
+                    ),
+                    blendMode = BlendMode.DstIn,
+                )
+            }
+
+            if (scrollableState.canScrollForward && endEdgeWidthPx >= 1f) {
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color.Black, Color.Transparent),
+                        startX = size.width - endEdgeWidthPx,
+                        endX = size.width,
                     ),
                     blendMode = BlendMode.DstIn,
                 )

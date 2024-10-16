@@ -1,5 +1,8 @@
 package com.example.nimbus.ui.viewmodels
 
+import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +29,8 @@ data class RosterScreenUiState(
     }
 }
 
-class RosterScreenViewModel : ViewModel() {
+
+class RosterScreenViewModel(val globalViewModel: GlobalViewModel) : ViewModel() {
     private val _uiState = MutableStateFlow(RosterScreenUiState())
     val uiState: StateFlow<RosterScreenUiState> = _uiState.asStateFlow()
 
@@ -40,8 +44,8 @@ class RosterScreenViewModel : ViewModel() {
                 val athleteApi = RetrofitService.getAthletesApi()
                 val response = athleteApi.getAllAthletes()
 
-                if(response.isSuccessful && !response.body().isNullOrEmpty()) {
-                    _uiState.value = response.body()?.let {
+                if(response.isSuccessful && !response.body()?.data.isNullOrEmpty()) {
+                    _uiState.value = response.body()?.data?.let {
                         _uiState.value.copy(
                             athletes = it
                         )
