@@ -25,8 +25,8 @@ private fun okHttpClient(token: String) = OkHttpClient().newBuilder().addInterce
 )
 
 object RetrofitService {
-    //val BASE_URL = "https://6642243c3d66a67b34366411.mockapi.io/nimbus/"
-    val BASE_URL = "http://192.168.15.108:8080/"
+    val BASE_URL = "https://6642243c3d66a67b34366411.mockapi.io/nimbus/"
+    //adicionar url da api na nuvem/local
 
     fun getRetrofit(context: Context): Retrofit {
         val sharedPref = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
