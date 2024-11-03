@@ -39,7 +39,6 @@ import java.util.UUID
 @Composable
 fun TeamCard(
     team: Team,
-    players: Int,
     onClick: () -> Unit
 ) {
     val interactionSource= remember { MutableInteractionSource() }
@@ -102,28 +101,15 @@ fun TeamCard(
                     )
                 }
             }
+            val athletesCount = team.athletes?.size ?: 0
 
             Text(
-                text = stringResource(id = R.string.players_amount, players),
+                text = stringResource(id = R.string.players_amount, athletesCount),
                 color = colorResource(id = R.color.gray_400),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = poppinsFontFamily,
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    NimbusTheme {
-        val time = Team(UUID.randomUUID(), "Golden State Warriors", "Sub-20", "https://logodownload.org/wp-content/uploads/2019/06/golden-state-warriors-logo-2-1.png", "Rua Haddock Lobo", 0)
-
-        TeamCard(
-            team = time,
-            players = 20,
-            onClick = {}
-        )
     }
 }

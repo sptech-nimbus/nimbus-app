@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import com.example.nimbus.utils.SharedPreferencesManager
 
 data class MyTeamsScreenUiState(
     val isLoading: Boolean = true,
@@ -16,7 +18,9 @@ data class MyTeamsScreenUiState(
     val error: String? = null
 )
 
-class MyTeamsScreenViewModel() : ViewModel() {
+class MyTeamsScreenViewModel(
+    private val sharedPrefManager: SharedPreferencesManager
+) : ViewModel() {
     private val _uiState = MutableStateFlow(MyTeamsScreenUiState())
     val uiState: StateFlow<MyTeamsScreenUiState> = _uiState.asStateFlow()
 
@@ -27,9 +31,10 @@ class MyTeamsScreenViewModel() : ViewModel() {
     private fun fetchTeams() {
         viewModelScope.launch {
             try {
-                val teamsApi = RetrofitService.getTeamsApi()
-                val response = teamsApi.getAllTeams()
-
+                val teamsApi = RetrofitService.getTeamsApi(sharedPrefManager.getAuthToken())
+                val response = teamsApi.getAllByCoach(sharedPrefManager.getPersonaId())
+                Log.i("Resposta - Get All Teams", "$response")
+                Log.i("Dados resposta", "${response.body()?.data}")
                 if(response.isSuccessful && !response.body()?.data.isNullOrEmpty()) {
                     _uiState.value = response.body()?.data?.let {
                         _uiState.value.copy(
@@ -56,3 +61,15 @@ class MyTeamsScreenViewModel() : ViewModel() {
         }
     }
  }
+
+class MyTeamsModelFactory(
+    private val sharedPreferencesManager: SharedPreferencesManager
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MyTeamsScreenViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MyTeamsScreenViewModel(sharedPreferencesManager) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

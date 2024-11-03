@@ -1,10 +1,11 @@
 package com.example.nimbus.api
 
-import android.annotation.SuppressLint
-import android.content.Context
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
+import com.example.nimbus.api.interfaces.AthletesAPI
+import com.example.nimbus.api.interfaces.GameResultsAPI
+import com.example.nimbus.api.interfaces.GamesAPI
+import com.example.nimbus.api.interfaces.GraphsAPI
+import com.example.nimbus.api.interfaces.TeamsAPI
+import com.example.nimbus.api.interfaces.UserAPI
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -25,13 +26,12 @@ private fun okHttpClient(token: String) = OkHttpClient().newBuilder().addInterce
 )
 
 object RetrofitService {
-    val BASE_URL = "https://6642243c3d66a67b34366411.mockapi.io/nimbus/"
-    //adicionar url da api na nuvem/local
+    //val BASE_URL = "https://6642243c3d66a67b34366411.mockapi.io/nimbus/" //ip mock
+    val BASE_URL = "http://192.168.15.108:8080/" //ip casa
 
-    fun getRetrofit(context: Context): Retrofit {
-        val sharedPref = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("token", null) ?: ""
+    //val token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5dXJpLmNvYWNoQGVtYWlsLmNvbSIsImlhdCI6MTcyODc3NjUxOH0.qeGgzLjr26LWN1KHY9nIAEyP4QbtWRNBnNqokbjAEkGUuWOy5_eBZ5Mkgxod2LtluyGJ6ssmYdYcMGOY4L0H9w"
 
+    fun getRetrofit(token: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient(token).build())
@@ -39,9 +39,10 @@ object RetrofitService {
             .build()
     }
 
-    fun getTeamsApi(context: Context): TeamsAPI = getRetrofit(context).create(TeamsAPI::class.java)
-    fun getAthletesApi(context: Context): AthletesAPI = getRetrofit(context).create(AthletesAPI::class.java)
-    fun getGamesAPI(context: Context): GamesAPI = getRetrofit(context).create(GamesAPI::class.java)
-    fun getGameResultsAPI(context: Context): GameResultsAPI = getRetrofit(context).create(GameResultsAPI::class.java)
-    fun getUsersApi(context: Context): UserAPI = getRetrofit(context).create(UserAPI::class.java)
+    fun getTeamsApi(token: String): TeamsAPI = getRetrofit(token).create(TeamsAPI::class.java)
+    fun getAthletesApi(token: String): AthletesAPI = getRetrofit(token).create(AthletesAPI::class.java)
+    fun getGamesApi(token: String): GamesAPI = getRetrofit(token).create(GamesAPI::class.java)
+    fun getGameResultsApi(token: String): GameResultsAPI = getRetrofit(token).create(GameResultsAPI::class.java)
+    fun getUsersApi(token: String): UserAPI = getRetrofit(token).create(UserAPI::class.java)
+    fun getGraphApi(token: String): GraphsAPI = getRetrofit(token).create(GraphsAPI::class.java)
 }

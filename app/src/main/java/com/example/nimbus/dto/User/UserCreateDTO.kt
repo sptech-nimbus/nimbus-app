@@ -1,4 +1,4 @@
-package com.example.nimbus.dto
+package com.example.nimbus.dto.User
 
 import com.example.nimbus.model.Athlete
 import com.example.nimbus.model.Coach

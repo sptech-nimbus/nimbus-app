@@ -45,11 +45,8 @@ import com.example.nimbus.ui.viewmodels.MyTeamsScreenViewModel
 @Composable
 fun Profile(
     globalViewModel: GlobalViewModel,
-    myTeamsViewModel: MyTeamsScreenViewModel,
     modifier: Modifier = Modifier
 ) {
-    val teamUiState by myTeamsViewModel.uiState.collectAsState()
-
     Column(
         modifier = modifier
             .fillMaxSize(1f)
@@ -119,20 +116,20 @@ fun Profile(
                 color = colorResource(id = R.color.orange_100)
             )
 
-            val scrollState = rememberLazyListState()
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(30.dp),
-                state = scrollState,
-                modifier = Modifier.drawFadingEdgesHorizontal(scrollState)
-            ) {
-                items(items = teamUiState.teams.toList()) {
-                    AsyncImage(
-                        model = it.picture,
-                        contentDescription = "Imagem do time ${it.name}",
-                        modifier = Modifier.size(100.dp)
-                    )
-                }
-            }
+            //val scrollState = rememberLazyListState()
+            //LazyRow(
+            //    horizontalArrangement = Arrangement.spacedBy(30.dp),
+            //    state = scrollState,
+            //    modifier = Modifier.drawFadingEdgesHorizontal(scrollState)
+            //) {
+            //    items(items = teamUiState.teams.toList()) {
+            //        AsyncImage(
+            //            model = it.picture,
+            //            contentDescription = "Imagem do time ${it.name}",
+            //            modifier = Modifier.size(100.dp)
+            //        )
+            //    }
+            //}
         }
 
     }

@@ -29,10 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.R
-import com.example.nimbus.ui.screens.DashboardScreen
-import com.example.nimbus.ui.screens.EventsScreen
-import com.example.nimbus.ui.screens.RosterScreen
-import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable

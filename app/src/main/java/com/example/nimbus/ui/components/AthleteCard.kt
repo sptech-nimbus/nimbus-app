@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.nimbus.R
 import com.example.nimbus.model.Athlete
-import com.example.nimbus.ui.screens.PlayerInfomationScreen
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
 
@@ -64,7 +63,7 @@ fun AthleteCard(
         ) {
 
             AsyncImage(
-                model = athlete.picture,
+                model = athlete.picture ?: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
                 contentDescription = stringResource(id = R.string.player_image, "${athlete.firstName} ${athlete.lastName}"),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -86,12 +85,14 @@ fun AthleteCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    fontSize = 12.sp,
-                    text = athlete.position,
-                    color = colorResource(id = R.color.gray_200),
-                    fontFamily = poppinsFontFamily
-                )
+                athlete.athleteDesc?.let {
+                    Text(
+                        fontSize = 12.sp,
+                        text = it.position,
+                        color = colorResource(id = R.color.gray_200),
+                        fontFamily = poppinsFontFamily
+                    )
+                }
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)

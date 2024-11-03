@@ -1,7 +1,13 @@
 package com.example.nimbus.model
 
+import com.example.nimbus.dto.Injury.InjuryGetDTO
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+
 data class Athlete(
-    val id: String,
+    val id: UUID,
     val firstName: String,
     val lastName: String,
     val birthDate: String,
@@ -10,7 +16,22 @@ data class Athlete(
     val category: String,
     val isStarting: Boolean,
     val isInjuried: Boolean,
-    //val athleteDesc: AthleteDesc, //descomentar para a implementação com a API real
-    //val injuries: List<Injury> //descomentar para a implementação com a API real
+    val athleteDesc: AthleteDesc?, //descomentar para a implementação com a API real
+    val injuries: List<InjuryGetDTO>?, //descomentar para a implementação com a API real
     val position: String, //remover para a implementação com a API real
-)
+) {
+    fun getIdade(): Int {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val dtNascto = LocalDate.parse(this.birthDate, formatter)
+
+        return Period.between(dtNascto, LocalDate.now()).years
+    }
+
+    fun getFormattedBirthDate(): String {
+        val formatterIn = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.parse(this.birthDate, formatterIn)
+
+        val formatterOut = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        return date.format(formatterOut)
+    }
+}

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,15 +34,20 @@ import com.example.nimbus.R
 import com.example.nimbus.ui.components.Button
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
+import com.example.nimbus.utils.SharedPreferencesManager
 
 class OnboardingScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
+
         setContent {
+
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_900)
+
             NimbusTheme {
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     OnboardingScreen(
                         name = "Android",

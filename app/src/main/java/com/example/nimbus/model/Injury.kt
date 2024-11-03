@@ -1,10 +1,12 @@
 package com.example.nimbus.model
 
+import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
+import java.util.UUID
 
 data class Injury(
-    val id: String,
+    val id: UUID,
     val type: String,
-    val initialDate: LocalDate,
+    @SerializedName("inicialDate") val initialDate: LocalDate,
     val finalDate: LocalDate
 )

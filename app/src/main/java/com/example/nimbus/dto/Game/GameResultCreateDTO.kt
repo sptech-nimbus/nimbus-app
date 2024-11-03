@@ -1,4 +1,4 @@
-package com.example.nimbus.dto
+package com.example.nimbus.dto.Game
 
 import java.util.UUID
 

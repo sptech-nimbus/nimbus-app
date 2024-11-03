@@ -3,6 +3,7 @@ package com.example.nimbus.ui.screens
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nimbus.R
 import com.example.nimbus.ui.theme.NimbusTheme
+import com.example.nimbus.utils.SharedPreferencesManager
 
 class SplashScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +35,18 @@ class SplashScreen : ComponentActivity() {
         setContent {
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_900)
+
+            val sharedPrefManager = SharedPreferencesManager(this)
+            val isUserLoggedIn = !sharedPrefManager.getAuthToken().isNullOrEmpty()
+
+            val destinationClass = if (isUserLoggedIn) MyTeamsScreen::class.java else OnboardingScreen::class.java
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                val intent = Intent(this, destinationClass)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }, 1000)
+
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     SplashScreen(
@@ -47,14 +61,6 @@ class SplashScreen : ComponentActivity() {
 
 @Composable
 fun SplashScreen(name: String, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
-    val handler = Handler()
-    val navigateRunnable = Runnable {
-        context.startActivity(Intent(context, OnboardingScreen::class.java))
-    }
-    handler.postDelayed(navigateRunnable, 1000)
-
     Column(
         modifier = Modifier
             .fillMaxSize()

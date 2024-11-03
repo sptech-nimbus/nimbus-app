@@ -48,37 +48,8 @@ import com.example.nimbus.ui.components.BottomNavigation
 import com.example.nimbus.ui.components.DeleteDialog
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
+import com.example.nimbus.ui.viewmodels.AthleteInfoViewModel
 import com.example.nimbus.ui.viewmodels.GlobalViewModel
-
-class PlayerInfomationScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
-        setContent {
-            window.statusBarColor = getColor(R.color.gray_900)
-            window.navigationBarColor = getColor(R.color.gray_700)
-            val globalViewModel by viewModels<GlobalViewModel>()
-
-            NimbusTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        BottomNavigation(
-                            selectedPage = 1,
-                            onItemClick = {},
-                            screen = stringResource(id = R.string.team)
-                        )
-                    }
-                ) { innerPadding ->
-                    PlayerInformation(
-                        globalViewModel = globalViewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun DottedLine() {
@@ -137,12 +108,15 @@ fun InfoLine(
 
 @Composable
 fun PlayerInformation(
+    viewModel: AthleteInfoViewModel,
     globalViewModel: GlobalViewModel,
     modifier: Modifier = Modifier,
     onPageClick: (athletePage: Int) -> Unit = {},
     onDeleteClick: () -> Unit = {},
 ) {
-    val uiState by globalViewModel.uiState.collectAsState()
+    val globalUiState by globalViewModel.uiState.collectAsState()
+    val athlete = globalUiState.selectedAthlete
+    val uiState by viewModel.uiState.collectAsState()
     var isDialogOpen by rememberSaveable { mutableStateOf(false) }
 
     Column(
@@ -153,7 +127,7 @@ fun PlayerInformation(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val athleteName =
-            "${uiState.selectedAthlete?.firstName} ${uiState.selectedAthlete?.lastName}"
+            "${athlete?.firstName} ${athlete?.lastName}"
 
         if (isDialogOpen) {
             DeleteDialog(
@@ -194,7 +168,7 @@ fun PlayerInformation(
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "1.87m".toUpperCase(),
+                    text = "${athlete?.athleteDesc?.height}m".toUpperCase(),
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFFFFEAE0),
                     fontFamily = catamaranFontFamily,
@@ -208,7 +182,7 @@ fun PlayerInformation(
                     .padding(5.dp)
             ) {
                 AsyncImage(
-                    model = uiState.selectedAthlete?.picture,
+                    model = athlete?.picture,
                     contentDescription = "jogador",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -230,7 +204,7 @@ fun PlayerInformation(
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "87kg".toUpperCase(),
+                    text = "${athlete?.athleteDesc?.weight}kg".toUpperCase(),
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFFFFEAE0),
                     fontFamily = catamaranFontFamily,
@@ -244,27 +218,27 @@ fun PlayerInformation(
                 .padding(top = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            val isStarting = if (uiState.selectedAthlete?.isStarting == true) "Sim" else "Não"
+            val isStarting = if (athlete?.isStarting == true) "Sim" else "Não"
 
             InfoLine(label = stringResource(id = R.string.starting), info = isStarting)
             InfoLine(
                 label = stringResource(id = R.string.position),
-                info = uiState.selectedAthlete?.position
+                info = athlete?.athleteDesc?.position
             )
-            InfoLine(label = stringResource(id = R.string.age), info = "19 anos")
+            InfoLine(label = stringResource(id = R.string.age), info = athlete?.getIdade().toString())
             InfoLine(
                 label = stringResource(id = R.string.category),
-                info = uiState.selectedAthlete?.category
+                info = athlete?.category
             )
-            InfoLine(label = stringResource(id = R.string.birth_date_short), info = "10/10/2004")
-            InfoLine(label = stringResource(id = R.string.phone) + " 1", info = "(11) 99999-9999")
+            InfoLine(label = stringResource(id = R.string.birth_date_short), info = athlete?.getFormattedBirthDate())
+            InfoLine(label = stringResource(id = R.string.phone) + " 1", info = athlete?.phone)
             InfoLine(
                 label = stringResource(id = R.string.email),
                 info = stringResource(id = R.string.email_placeholder)
             )
             InfoLine(
                 label = stringResource(id = R.string.address),
-                info = "Rua Haddock Lobo, 525..."
+                info = athlete?.athleteDesc?.address ?: "Indefinido"
             )
 
             Row(

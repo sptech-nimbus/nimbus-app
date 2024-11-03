@@ -6,47 +6,48 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
+import java.util.UUID
 
 data class AthleteInjuryUiState(
     val injuries: List<Injury> = listOf(
         Injury(
-            id = "1",
+            id = UUID.randomUUID(),
             type = "Distensão muscular",
             initialDate = LocalDate.of(2023, 1, 15),
             finalDate = LocalDate.of(2023, 1, 30)
         ),
         Injury(
-            id = "2",
+            id = UUID.randomUUID(),
             type = "Entorse de tornozelo",
             initialDate = LocalDate.of(2023, 3, 22),
             finalDate = LocalDate.of(2023, 4, 5)
         ),
         Injury(
-            id = "3",
+            id = UUID.randomUUID(),
             type = "Fratura no braço",
             initialDate = LocalDate.of(2023, 5, 10),
             finalDate = LocalDate.of(2023, 6, 25)
         ),
         Injury(
-            id = "4",
+            id = UUID.randomUUID(),
             type = "Luxação no ombro",
             initialDate = LocalDate.of(2023, 7, 1),
             finalDate = LocalDate.of(2023, 7, 20)
         ),
         Injury(
-            id = "5",
+            id = UUID.randomUUID(),
             type = "Ruptura de ligamento cruzado",
             initialDate = LocalDate.of(2023, 8, 5),
             finalDate = LocalDate.of(2024, 1, 15)
         ),
         Injury(
-            id = "6",
+            id = UUID.randomUUID(),
             type = "Concussão",
             initialDate = LocalDate.of(2023, 9, 10),
             finalDate = LocalDate.of(2023, 9, 20)
         ),
         Injury(
-            id = "7",
+            id = UUID.randomUUID(),
             type = "Tendinite no joelho",
             initialDate = LocalDate.of(2023, 10, 2),
             finalDate = LocalDate.of(2023, 11, 15)

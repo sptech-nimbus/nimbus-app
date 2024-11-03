@@ -85,7 +85,7 @@ fun TopNavigation(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                onBackClick(0)
+                if(selectedPage == 1 && athletePage > 0) onBackClick(0) else onMenuClick()
             }
         )
 

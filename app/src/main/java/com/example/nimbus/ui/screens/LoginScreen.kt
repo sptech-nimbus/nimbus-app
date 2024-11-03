@@ -35,13 +35,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nimbus.R
 import com.example.nimbus.ui.components.Button
 import com.example.nimbus.ui.components.CustomTextFieldPassword
 import com.example.nimbus.ui.components.CustomTextFieldWithIcon
 import com.example.nimbus.ui.theme.NimbusTheme
+import com.example.nimbus.ui.viewmodels.LoginModelFactory
 import com.example.nimbus.ui.viewmodels.LoginUiState
 import com.example.nimbus.ui.viewmodels.LoginViewModel
+import com.example.nimbus.utils.SharedPreferencesManager
 
 class LoginScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,13 +55,10 @@ class LoginScreen : ComponentActivity() {
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_900)
 
-            val viewModel by viewModels<LoginViewModel>()
-
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Login(
-                        modifier = Modifier.padding(innerPadding),
-                        viewModel
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
@@ -67,8 +67,13 @@ class LoginScreen : ComponentActivity() {
 }
 
 @Composable
-fun Login(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
+fun Login(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val sharedPrefManager = SharedPreferencesManager(context)
+
+    val viewModel: LoginViewModel = viewModel(
+        factory = LoginModelFactory(sharedPrefManager)
+    )
 
     Column(
         modifier = Modifier

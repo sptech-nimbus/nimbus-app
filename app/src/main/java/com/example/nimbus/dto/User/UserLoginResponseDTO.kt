@@ -1,4 +1,4 @@
-package com.example.nimbus.dto
+package com.example.nimbus.dto.User
 
 import java.util.UUID
 

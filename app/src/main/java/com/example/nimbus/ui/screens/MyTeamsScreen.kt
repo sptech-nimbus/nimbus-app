@@ -37,6 +37,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nimbus.R
 import com.example.nimbus.api.RetrofitService
 import com.example.nimbus.ui.components.CustomLoading
@@ -46,7 +49,10 @@ import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.ui.viewmodels.GlobalViewModel
+import com.example.nimbus.ui.viewmodels.LoginViewModel
+import com.example.nimbus.ui.viewmodels.MyTeamsModelFactory
 import com.example.nimbus.ui.viewmodels.MyTeamsScreenViewModel
+import com.example.nimbus.utils.SharedPreferencesManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -59,15 +65,15 @@ class MyTeamsScreen : ComponentActivity() {
             window.statusBarColor = getColor(R.color.gray_900)
             window.navigationBarColor = getColor(R.color.gray_900)
 
-            val viewModel by viewModels<MyTeamsScreenViewModel>()
-            val globalViewModel by viewModels<GlobalViewModel>()
+            val globalViewModel: GlobalViewModel by viewModels {
+                ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            }
 
             NimbusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MyTeams(
-                        globalViewModel,
-                        viewModel,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        globalViewModel
                     )
                 }
             }
@@ -76,17 +82,15 @@ class MyTeamsScreen : ComponentActivity() {
 }
 
 @Composable
-fun MyTeams(
-    globalViewModel: GlobalViewModel,
-    viewModel: MyTeamsScreenViewModel,
-    modifier: Modifier = Modifier
-) {
+fun MyTeams(modifier: Modifier, globalViewModel: GlobalViewModel) {
     val context = LocalContext.current
+    val sharedPrefManager = SharedPreferencesManager(context)
+
+    val viewModel: MyTeamsScreenViewModel = viewModel(
+        factory = MyTeamsModelFactory(sharedPrefManager)
+    )
+
     val uiState by viewModel.uiState.collectAsState()
-
-    val sharedPref = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
-    val username = sharedPref.getString("username", null) ?: "Indefinido"
-
 
     Column(
         modifier = Modifier
@@ -103,7 +107,7 @@ fun MyTeams(
         )
 
         Text(
-            text = username,
+            text = sharedPrefManager.getUsername(),
             color = Color(0xFFFF7425),
             fontSize = 36.sp,
             fontWeight = FontWeight.Black,
@@ -135,7 +139,6 @@ fun MyTeams(
                 items(items = uiState.teams.toList()) {
                     TeamCard(
                         team = it,
-                        players = 10,
                         onClick = {
                             globalViewModel.selectTeam(it)
                             context.startActivity(Intent(context, MainActivity::class.java))

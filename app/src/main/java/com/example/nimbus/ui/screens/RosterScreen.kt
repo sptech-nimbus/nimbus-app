@@ -61,7 +61,6 @@ class RosterScreen : ComponentActivity() {
 
             val viewModel by viewModels<RosterScreenViewModel>()
             val globalViewModel by viewModels<GlobalViewModel>()
-            val globalUiState by globalViewModel.uiState.collectAsState()
 
             NimbusTheme {
                 Scaffold(
@@ -88,6 +87,7 @@ fun Roster(
     onAthleteClick: (athletePage: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val globalUiState by globalViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -118,6 +118,7 @@ fun Roster(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 state = scrollState
             ) {
+                Log.i("RosterScreen", "${viewModel.filteredAthletes}")
                 items(items = viewModel.filteredAthletes.toList().chunked(2)) { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),

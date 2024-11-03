@@ -1,5 +1,6 @@
-package com.example.nimbus.api
+package com.example.nimbus.api.interfaces
 
+import com.example.nimbus.api.ApiResponse
 import com.example.nimbus.model.AthleteDesc
 import retrofit2.Response
 import retrofit2.http.GET

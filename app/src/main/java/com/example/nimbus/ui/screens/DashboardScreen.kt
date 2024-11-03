@@ -1,6 +1,7 @@
 package com.example.nimbus.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,8 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.nimbus.R
-import com.example.nimbus.api.game1
-import com.example.nimbus.api.team1
 import com.example.nimbus.ui.components.BottomNavigation
 import com.example.nimbus.ui.components.Container
 import com.example.nimbus.ui.components.MatchCard
@@ -44,31 +44,9 @@ import com.example.nimbus.ui.components.TopNavigation
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
+import com.example.nimbus.ui.viewmodels.GlobalViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-class DashboardScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
-        setContent {
-            window.statusBarColor = getColor(R.color.gray_900)
-            window.navigationBarColor = getColor(R.color.gray_700)
-
-            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            val currentDate = LocalDate.now().format(formatter)
-
-            NimbusTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    //bottomBar = { BottomNavigation(screen = stringResource(id = R.string.home)) },
-                ) { innerPadding ->
-                    Dashboard( modifier = Modifier.padding(innerPadding) )
-                }
-            }
-         }
-    }
-}
 
 data class StatItem(
     val label: String,
@@ -77,7 +55,13 @@ data class StatItem(
 )
 
 @Composable
-fun Dashboard(modifier: Modifier = Modifier) {
+fun Dashboard(
+    modifier: Modifier = Modifier,
+    globalViewModel: GlobalViewModel
+) {
+    val globalUiState = globalViewModel.uiState.collectAsState()
+    Log.i("Dashboard Time", "${globalViewModel.getSelectedTeam()}")
+
     val statsList = listOf(
         StatItem("Vitórias", "32"),
         StatItem("Pontos", "92.5"),
@@ -161,20 +145,22 @@ fun Dashboard(modifier: Modifier = Modifier) {
             place = "Rua Haddock Lobo"
         )
 
-        PendingResult(
-            adversaryTeam = team1,
-            onConfirmClick = { /*TODO*/ },
-            onDismissClick = { /*TODO*/ },
-            isChallenger = true,
-            game = game1
-        )
+        //PendingResult(
+        //    adversaryTeam = team1,
+        //    onConfirmClick = { /*TODO*/ },
+        //    onDismissClick = { /*TODO*/ },
+        //    isChallenger = true,
+        //    game = game1
+        //)
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Container(
-                modifier = Modifier.width(160.dp).clip(RoundedCornerShape(20.dp)),
+                modifier = Modifier
+                    .width(160.dp)
+                    .clip(RoundedCornerShape(20.dp)),
                 color = colorResource(id = R.color.orange_500)
             ) {
                 Column(
@@ -197,7 +183,9 @@ fun Dashboard(modifier: Modifier = Modifier) {
             }
 
             Container(
-                modifier = Modifier.width(160.dp).clip(RoundedCornerShape(20.dp)),
+                modifier = Modifier
+                    .width(160.dp)
+                    .clip(RoundedCornerShape(20.dp)),
                 color = colorResource(id = R.color.orange_500)
             ) {
                 Column(
@@ -219,13 +207,5 @@ fun Dashboard(modifier: Modifier = Modifier) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview4() {
-    NimbusTheme {
-        Dashboard()
     }
 }

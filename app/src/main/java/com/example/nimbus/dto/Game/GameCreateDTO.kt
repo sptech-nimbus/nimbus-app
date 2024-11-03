@@ -1,4 +1,4 @@
-package com.example.nimbus.dto
+package com.example.nimbus.dto.Game
 
 import java.time.LocalDate
 import java.time.LocalDateTime

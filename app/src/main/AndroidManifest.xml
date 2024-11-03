@@ -22,11 +22,6 @@
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Nimbus" />
         <activity
-            android:name=".ui.screens.PlayerInfomationScreen"
-            android:exported="true"
-            android:label="@string/title_activity_player_infomation_screen"
-            android:theme="@style/Theme.Nimbus" />
-        <activity
             android:name=".ui.screens.EventsScreen"
             android:exported="true"
             android:label="@string/title_activity_events_screen"
@@ -35,11 +30,6 @@
             android:name=".ui.screens.RosterScreen"
             android:exported="true"
             android:label="@string/title_activity_roster_screen"
-            android:theme="@style/Theme.Nimbus" />
-        <activity
-            android:name=".ui.screens.DashboardScreen"
-            android:exported="true"
-            android:label="@string/title_activity_dashboard_screen"
             android:theme="@style/Theme.Nimbus" />
         <activity
             android:name=".ui.screens.MyTeamsScreen"

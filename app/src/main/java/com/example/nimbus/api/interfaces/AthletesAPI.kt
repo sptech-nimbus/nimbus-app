@@ -1,5 +1,6 @@
-package com.example.nimbus.api
+package com.example.nimbus.api.interfaces
 
+import com.example.nimbus.api.ApiResponse
 import com.example.nimbus.model.Athlete
 import retrofit2.Response
 import retrofit2.http.GET
@@ -16,5 +17,5 @@ interface AthletesAPI {
     suspend fun getAthlete(@Path("id") id: UUID): Response<ApiResponse<Athlete>>
 
     @GET("/athletes/by-team/{id}")
-    suspend fun getAllByTeam(@Path("id") id: UUID): Response<ApiResponse<Athlete>>
+    suspend fun getAllByTeam(@Path("id") id: UUID): Response<ApiResponse<List<Athlete>>>
 }

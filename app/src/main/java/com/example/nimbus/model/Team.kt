@@ -8,6 +8,6 @@ data class Team(
     val category: String?,
     val picture: String?,
     val local: String?,
-    //val athletes: List<Athlete>?,
+    val athletes: List<Athlete>?,
     val level: Int
 )

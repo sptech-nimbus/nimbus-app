@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter
 import com.example.nimbus.R
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import java.time.Duration
+import java.util.UUID
 
 @Composable
 fun InjuryCard(
@@ -85,7 +86,7 @@ fun InjuryCard(
 @Preview(showBackground = true)
 @Composable
 fun InjuryCardPreview() {
-    val example = Injury("1", "Lesão muscular", LocalDate.of(2024, 10, 1), LocalDate.of(2024, 12, 17))
-    
+    val example = Injury(UUID.randomUUID(), "Lesão muscular", LocalDate.of(2024, 10, 1), LocalDate.of(2024, 12, 17))
+
     InjuryCard(injury = example)
 }

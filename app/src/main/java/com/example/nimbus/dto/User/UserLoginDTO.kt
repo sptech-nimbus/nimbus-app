@@ -1,4 +1,4 @@
-package com.example.nimbus.dto
+package com.example.nimbus.dto.User
 
 data class UserLoginDTO(
     val email: String,

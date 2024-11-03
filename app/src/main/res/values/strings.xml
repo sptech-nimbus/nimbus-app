@@ -38,6 +38,7 @@
     <string name="date">Data</string>
     <string name="start">Início</string>
     <string name="end">Fim</string>
+    <string name="change_team">Trocar time</string>
 
     <!-- PLACEHOLDERS -->
     <string name="email_placeholder">seuemail@email.com</string>
