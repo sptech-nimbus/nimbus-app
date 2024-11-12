@@ -2,6 +2,7 @@ package com.example.nimbus.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.R
+import com.example.nimbus.domain.Team
 import com.example.nimbus.ui.theme.NimbusTheme
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import java.text.SimpleDateFormat
@@ -230,12 +234,18 @@ fun Long.toBrazilianDateFormat(
     return formatter.format(date)
 }
 
+fun Long.toFormattedDateString(pattern: String = "yyyy-MM-dd"): String {
+    val date = Date(this)
+    val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+    return sdf.format(date)
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDocked(
     label: String,
     fraction: Float = 1f,
-    onValueChange: (Long?) -> Unit?
+    onValueChange: (String?) -> Unit?
 ) {
     val focusManager = LocalFocusManager.current
     var showDatePickerDialog by remember {
@@ -256,7 +266,9 @@ fun DatePickerDocked(
                         text = stringResource(id = R.string.pick_date),
                         fontSize = 20,
                         onClick = {
-                            onValueChange(datePickerState.selectedDateMillis)
+                            val formattedDate = datePickerState.selectedDateMillis?.toFormattedDateString()
+
+                            onValueChange(formattedDate)
 
                             datePickerState
                                 .selectedDateMillis?.let { millis ->
@@ -359,6 +371,43 @@ fun TextFieldsPreview() {
                     label = "Label",
                     placeholder = "Placeholder",
                     fraction = 1f
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DropdownTeams(
+    options: List<Team>,
+    onOptionSelected: (Team) -> Unit
+) {
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    var selectedOption by remember {
+        mutableStateOf("")
+    }
+
+    Column {
+        CustomTextField(
+            value = selectedOption,
+            onValueChange = {},
+            placeholder = "Selecione um time",
+            readOnly = true,
+            modifier = Modifier.clickable { expanded = !expanded }
+        )
+
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            options.forEach {
+                DropdownMenuItem(
+                    text = { Text(text = it.name) },
+                    onClick = {
+                        selectedOption = it.name
+                        expanded = false
+                        onOptionSelected(it)
+                    }
                 )
             }
         }

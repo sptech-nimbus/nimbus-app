@@ -3,7 +3,7 @@ package com.example.nimbus.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nimbus.api.RetrofitService
-import com.example.nimbus.model.Team
+import com.example.nimbus.domain.Team
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,7 +60,7 @@ class MyTeamsScreenViewModel(
             }
         }
     }
- }
+}
 
 class MyTeamsModelFactory(
     private val sharedPreferencesManager: SharedPreferencesManager

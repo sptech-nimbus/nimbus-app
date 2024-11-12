@@ -1,6 +1,6 @@
 package com.example.nimbus.api.interfaces
 
-import com.example.nimbus.api.ApiResponse
+import com.example.nimbus.domain.ApiResponse
 import com.example.nimbus.dto.Graphs.PointsDivisionDTO
 import com.example.nimbus.dto.Graphs.WinsDTO
 import retrofit2.Response

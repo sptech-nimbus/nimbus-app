@@ -25,16 +25,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.nimbus.R
-import com.example.nimbus.model.Team
-import com.example.nimbus.ui.theme.NimbusTheme
+import com.example.nimbus.domain.Team
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
-import java.util.UUID
 
 @Composable
 fun TeamCard(
@@ -56,11 +53,12 @@ fun TeamCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = team.picture,
+            model = team.picture ?: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
             contentDescription = stringResource(id = R.string.team_image_desc, team.name),
             modifier = Modifier
                 .size(60.dp)
-                .align(Alignment.CenterVertically),
+                .align(Alignment.CenterVertically)
+                .clip(RoundedCornerShape(5.dp)),
             contentScale = ContentScale.Fit
         )
 

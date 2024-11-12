@@ -1,28 +1,27 @@
 package com.example.nimbus.ui.screens
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -31,21 +30,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,23 +51,35 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nimbus.R
-import com.example.nimbus.model.getDrawerItems
+import com.example.nimbus.dto.Team.TeamTransferDTO
+import com.example.nimbus.ui.components.getDrawerItems
 import com.example.nimbus.ui.components.BottomNavigation
+import com.example.nimbus.ui.components.LogoutDialog
 import com.example.nimbus.ui.components.TopNavigation
+import com.example.nimbus.ui.screens.fragments.Athlete.AthleteInjuryScreen
+import com.example.nimbus.ui.screens.fragments.Dashboard
+import com.example.nimbus.ui.screens.fragments.Events
+import com.example.nimbus.ui.screens.fragments.Athlete.PlayerInformation
+import com.example.nimbus.ui.screens.fragments.Profile
+import com.example.nimbus.ui.screens.fragments.Roster
 import com.example.nimbus.ui.theme.catamaranFontFamily
-import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.ui.ui.theme.NimbusTheme
 import com.example.nimbus.ui.viewmodels.AthleteINfoModelFactory
 import com.example.nimbus.ui.viewmodels.AthleteInfoViewModel
+import com.example.nimbus.ui.viewmodels.AthleteInjuryModelFactory
 import com.example.nimbus.ui.viewmodels.AthleteInjuryScreenViewModel
+import com.example.nimbus.ui.viewmodels.DashboardModelFactory
+import com.example.nimbus.ui.viewmodels.DashboardViewModel
+import com.example.nimbus.ui.viewmodels.EventsModelFactory
+import com.example.nimbus.ui.viewmodels.EventsViewModel
 import com.example.nimbus.ui.viewmodels.GlobalViewModel
-import com.example.nimbus.ui.viewmodels.MyTeamsScreenViewModel
 import com.example.nimbus.ui.viewmodels.RosterModelFactory
 import com.example.nimbus.ui.viewmodels.RosterScreenViewModel
 import com.example.nimbus.utils.SharedPreferencesManager
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("NewApi")
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,25 +90,43 @@ class MainActivity : ComponentActivity() {
 
             val drawerItems = getDrawerItems()
 
-            val pagerState = rememberPagerState(initialPage = 2) {5}
-            val athletePagerState = rememberPagerState() {3}
+            val pagerState = rememberPagerState(initialPage = 1) {4}
+            val athletePagerState = rememberPagerState {3}
             val coroutineScope = rememberCoroutineScope()
 
             val context = LocalContext.current
             val sharedPrefManager = SharedPreferencesManager(context)
 
             NimbusTheme {
-                //val globalViewModel by viewModels<GlobalViewModel>()
                 val globalViewModel: GlobalViewModel by viewModels {
                     ViewModelProvider.AndroidViewModelFactory.getInstance(application)
                 }
+                val globalUiState by globalViewModel.uiState.collectAsState()
+
+                val teamDTO = intent.getParcelableExtra("team", TeamTransferDTO::class.java)
+                teamDTO?.let {
+                    globalViewModel.selectTeam(teamDTO)
+                }
+
                 val rosterViewModel: RosterScreenViewModel = viewModel(
-                    factory = RosterModelFactory(sharedPrefManager)
+                    factory = RosterModelFactory(sharedPrefManager, globalViewModel, teamDTO)
                 )
+
                 val athleteInfoViewModel: AthleteInfoViewModel = viewModel(
                     factory = AthleteINfoModelFactory(sharedPrefManager, globalViewModel)
                 )
-                val athleteInjuryViewModel by viewModels<AthleteInjuryScreenViewModel>()
+
+                val athleteInjuryViewModel: AthleteInjuryScreenViewModel = viewModel(
+                    factory = AthleteInjuryModelFactory(globalViewModel, sharedPrefManager)
+                )
+
+                val dashboardViewModel: DashboardViewModel = viewModel(
+                    factory = DashboardModelFactory(sharedPrefManager, globalViewModel)
+                )
+
+                val eventsViewModel: EventsViewModel = viewModel(
+                    factory = EventsModelFactory(sharedPrefManager, globalViewModel)
+                )
 
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
@@ -106,12 +134,26 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(0)
                 }
 
+                var isDialogOpen by rememberSaveable {
+                    mutableStateOf(false)
+                }
+
                 ModalNavigationDrawer(
                     drawerContent = {
                         ModalDrawerSheet(
                             drawerContainerColor = colorResource(id = R.color.gray_900),
                             modifier = Modifier.width(300.dp)
-                        ){
+                        ) {
+                            if(isDialogOpen) {
+                                LogoutDialog(
+                                    onDismissButton = { isDialogOpen = false },
+                                    onConfirmButton = {
+                                        sharedPrefManager.clearData()
+                                        context.startActivity(Intent(context, OnboardingScreen::class.java))
+                                    }
+                                )
+                            }
+
                             Spacer(modifier = Modifier.height(30.dp))
 
                             Column(
@@ -182,6 +224,7 @@ class MainActivity : ComponentActivity() {
                                                 scope.launch {
                                                     drawerState.close()
                                                 }
+                                                it.onClick?.let { it1 -> it1() }
                                             },
                                             icon = if (index == selectedItemIndex) it.selectedIcon else it.unselectedIcon,
                                             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -194,7 +237,25 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(50.dp))
+                            Spacer(modifier = Modifier.height(160.dp))
+
+                            val interactionSource = remember { MutableInteractionSource() }
+
+                            Row(Modifier.padding(horizontal = 40.dp, vertical = 20.dp)) {
+                                Text(
+                                    text = "Sair",
+                                    fontFamily = catamaranFontFamily,
+                                    fontWeight = FontWeight.Bold,
+                                    color = colorResource(id = R.color.red),
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.clickable(
+                                        interactionSource = interactionSource,
+                                        indication = null
+                                    ) {
+                                        isDialogOpen = true
+                                    }
+                                )
+                            }
                         }
                     },
                     drawerState = drawerState,
@@ -221,7 +282,6 @@ class MainActivity : ComponentActivity() {
                         },
                         bottomBar = {
                             BottomNavigation(
-                                screen = stringResource(id = R.string.events),
                                 selectedPage = pagerState.currentPage,
                                 onItemClick = { page ->
                                     coroutineScope.launch {
@@ -233,8 +293,7 @@ class MainActivity : ComponentActivity() {
 
                         HorizontalPager(pagerState, Modifier.padding(innerPadding)) { page ->
                             when(page) {
-                                0 -> Chat()
-                                1 -> {
+                                0 -> {
                                     HorizontalPager(
                                         state = athletePagerState,
                                         userScrollEnabled = false
@@ -257,13 +316,13 @@ class MainActivity : ComponentActivity() {
                                                         athletePagerState.animateScrollToPage(athletePage)
                                                     }
                                                 })
-                                            2 -> AthleteInjuryScreen(globalViewModel, athleteInjuryViewModel)
+                                            2 -> AthleteInjuryScreen(athleteInjuryViewModel, globalViewModel)
                                         }
                                     }
                                 }
-                                2 -> Dashboard(globalViewModel = globalViewModel)
-                                3 -> Events()
-                                4 -> Profile(globalViewModel)
+                                1 -> Dashboard(dashboardViewModel, globalViewModel)
+                                2 -> Events(eventsViewModel, globalViewModel)
+                                3 -> Profile(globalViewModel, sharedPrefManager)
                             }
                         }
                     }

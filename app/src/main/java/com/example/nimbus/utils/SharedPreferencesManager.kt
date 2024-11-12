@@ -47,4 +47,11 @@ class SharedPreferencesManager(context: Context) {
             apply()
         }
     }
+
+    fun clearData() {
+        with(sharedPreferences.edit()) {
+            clear() // Limpa todas as entradas
+            apply() // Aplica as mudanças de forma assíncrona
+        }
+    }
 }

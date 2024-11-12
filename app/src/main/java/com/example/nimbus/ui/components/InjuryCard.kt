@@ -1,8 +1,6 @@
 package com.example.nimbus.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,27 +13,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.model.Injury
+import com.example.nimbus.domain.Injury
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.nimbus.R
+import com.example.nimbus.dto.Injury.InjuryGetDTO
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import java.time.Duration
 import java.util.UUID
 
 @Composable
 fun InjuryCard(
-    injury: Injury
+    injury: InjuryGetDTO
 ) {
+    val initialDateUnformatted = LocalDate.parse(injury.initialDate)
+    val finalDateUnformatted = LocalDate.parse(injury.finalDate)
+
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    val initialDate = injury.initialDate.format(formatter)
-    val finalDate = injury.finalDate.format(formatter)
-    val dayDiff = Duration.between(injury.initialDate.atStartOfDay(), injury.finalDate.atStartOfDay()).toDays()
+    val initialDate = initialDateUnformatted.format(formatter)
+    val finalDate = finalDateUnformatted.format(formatter)
+    val dayDiff = Duration.between(initialDateUnformatted.atStartOfDay(), finalDateUnformatted.atStartOfDay()).toDays()
 
     Row(
         modifier = Modifier
@@ -86,7 +87,7 @@ fun InjuryCard(
 @Preview(showBackground = true)
 @Composable
 fun InjuryCardPreview() {
-    val example = Injury(UUID.randomUUID(), "Lesão muscular", LocalDate.of(2024, 10, 1), LocalDate.of(2024, 12, 17))
+    val example = InjuryGetDTO(UUID.randomUUID(), "Lesão muscular", "2024-10-01", "2024-12-17")
 
     InjuryCard(injury = example)
 }

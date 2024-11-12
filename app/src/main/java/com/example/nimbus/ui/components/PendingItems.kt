@@ -1,7 +1,6 @@
 package com.example.nimbus.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,33 +15,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.nimbus.model.Team
+import com.example.nimbus.domain.Team
 import com.example.nimbus.R
 import com.example.nimbus.api.game1
-import com.example.nimbus.api.team1
-import com.example.nimbus.model.Game
+import com.example.nimbus.domain.Game
+import com.example.nimbus.dto.Game.LastGameDTO
 import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun PendingResult(
-    adversaryTeam: Team,
     onConfirmClick: () -> Unit,
     onDismissClick: () -> Unit,
-    isChallenger: Boolean,
-    game: Game,
+    lastGame: LastGameDTO,
     modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp)),
-        color = colorResource(id = R.color.gray_700),
-        border = BorderStroke(1.dp, colorResource(id = R.color.gray_500))
+        color = colorResource(id = R.color.gray_700)
     ) {
         Row(
             modifier = Modifier
@@ -56,7 +51,7 @@ fun PendingResult(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = adversaryTeam.name,
+                    text = lastGame.adversaryName,
                     color = colorResource(R.color.orange_100),
                     fontSize = 18.sp,
                     fontFamily = poppinsFontFamily,
@@ -69,7 +64,7 @@ fun PendingResult(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = game.gameResult?.chalengedPoints.toString(),
+                        text = lastGame.gameResult?.chalengedPoints.toString(),
                         fontFamily = poppinsFontFamily,
                         color = colorResource(id = R.color.orange_500),
                         fontSize = 25.sp,
@@ -83,7 +78,7 @@ fun PendingResult(
                     )
                     
                     Text(
-                        text = game.gameResult?.challengerPoints.toString(),
+                        text = lastGame.gameResult?.challengerPoints.toString(),
                         fontFamily = poppinsFontFamily,
                         color = colorResource(id = R.color.orange_500),
                         fontSize = 25.sp,
@@ -93,7 +88,7 @@ fun PendingResult(
             }
 
             Row {
-                game.gameResult?.let {
+                lastGame.gameResult?.let {
                     ResultCard(
                         gameResult = it,
                         16,
@@ -108,11 +103,13 @@ fun PendingResult(
 @Preview
 @Composable
 fun PendingItemsPreview() {
-    PendingResult(
-        adversaryTeam = team1,
-        onConfirmClick = { /*TODO*/ },
-        onDismissClick = { /*TODO*/ },
-        isChallenger = true,
-        game = game1
-    )
+    val lastGame = game1.gameResult?.let { LastGameDTO("Chicago Bulls", it) }
+
+    if (lastGame != null) {
+        PendingResult(
+            lastGame = lastGame,
+            onConfirmClick = { /*TODO*/ },
+            onDismissClick = { /*TODO*/ },
+        )
+    }
 }

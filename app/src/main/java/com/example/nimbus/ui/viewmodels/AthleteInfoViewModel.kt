@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.nimbus.api.RetrofitService
-import com.example.nimbus.model.Athlete
+import com.example.nimbus.domain.Athlete
 import com.example.nimbus.utils.SharedPreferencesManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +25,10 @@ class AthleteInfoViewModel(
     val uiState: StateFlow<AthleteInfoUiState> = _uiState.asStateFlow()
 
     init {
+        reload()
+    }
+
+    fun reload() {
         fetchAthleteDesc()
     }
 

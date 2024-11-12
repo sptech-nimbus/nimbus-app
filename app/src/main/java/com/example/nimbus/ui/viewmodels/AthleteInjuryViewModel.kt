@@ -1,73 +1,75 @@
 package com.example.nimbus.ui.viewmodels
 
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
-import com.example.nimbus.model.Injury
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.nimbus.api.RetrofitService
+import com.example.nimbus.domain.Injury
+import com.example.nimbus.dto.Athlete.AthleteIdDTO
+import com.example.nimbus.dto.Injury.InjuryCreateDTO
+import com.example.nimbus.dto.Injury.InjuryGetDTO
+import com.example.nimbus.utils.SharedPreferencesManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.UUID
 
 data class AthleteInjuryUiState(
-    val injuries: List<Injury> = listOf(
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Distensão muscular",
-            initialDate = LocalDate.of(2023, 1, 15),
-            finalDate = LocalDate.of(2023, 1, 30)
-        ),
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Entorse de tornozelo",
-            initialDate = LocalDate.of(2023, 3, 22),
-            finalDate = LocalDate.of(2023, 4, 5)
-        ),
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Fratura no braço",
-            initialDate = LocalDate.of(2023, 5, 10),
-            finalDate = LocalDate.of(2023, 6, 25)
-        ),
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Luxação no ombro",
-            initialDate = LocalDate.of(2023, 7, 1),
-            finalDate = LocalDate.of(2023, 7, 20)
-        ),
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Ruptura de ligamento cruzado",
-            initialDate = LocalDate.of(2023, 8, 5),
-            finalDate = LocalDate.of(2024, 1, 15)
-        ),
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Concussão",
-            initialDate = LocalDate.of(2023, 9, 10),
-            finalDate = LocalDate.of(2023, 9, 20)
-        ),
-        Injury(
-            id = UUID.randomUUID(),
-            type = "Tendinite no joelho",
-            initialDate = LocalDate.of(2023, 10, 2),
-            finalDate = LocalDate.of(2023, 11, 15)
-        )
-    ),
     val typeText: String = "",
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now()
 )
 
-class AthleteInjuryScreenViewModel : ViewModel() {
+class AthleteInjuryScreenViewModel(
+    private val globalViewModel: GlobalViewModel,
+    private val sharedPrefManager: SharedPreferencesManager
+) : ViewModel() {
     private val _uiState = MutableStateFlow(AthleteInjuryUiState())
     val uiState: StateFlow<AthleteInjuryUiState> = _uiState.asStateFlow()
 
-    init {
-        fetchInjuries()
-    }
+    val injuryApi = RetrofitService.getInjuryApi(sharedPrefManager.getAuthToken())
 
-    private fun fetchInjuries() {
+    fun postInjury() {
+        val athleteId = AthleteIdDTO(globalViewModel.uiState.value.selectedAthlete!!.id)
 
+        val injury = InjuryCreateDTO(
+            _uiState.value.startDate.toString(),
+            _uiState.value.endDate.toString(),
+            _uiState.value.typeText,
+            athleteId
+        )
+        viewModelScope.launch {
+            try {
+                val response = injuryApi.postInjury(injury)
+                if(response.isSuccessful) {
+                    val injury = response.body()?.data
+                    Log.i("AthleteInjury", "Lesão cadastrada com sucesso: $injury")
+
+                    val injuries = mutableListOf<InjuryGetDTO>()
+                    globalViewModel.getSelectedAthlete()!!.injuries?.let { injuries.addAll(it) }
+                    injuries.add(injury!!)
+                    Log.i("AthleteInjury", "Lesões do atleta: $injuries")
+
+                    val athlete = globalViewModel.getSelectedAthlete()!!.copy(injuries = injuries)
+                    Log.i("AthleteInjury", "Atleta atualizado: $athlete")
+
+                    globalViewModel.selectAthlete(athlete)
+                }
+                else {
+                    Log.e("AthleteInjury", "Erro ${response.code()}: ${response.errorBody()?.string()}")
+                }
+            }
+            catch (e: Exception) {
+                Log.e("AthleteInjury", "Erro na requisição", e)
+            }
+        }
     }
 
     fun onTypeChange(text: String) {
@@ -78,7 +80,20 @@ class AthleteInjuryScreenViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(startDate = newDate)
     }
 
-    fun endDateChange(newDate: LocalDate) {
+    fun onEndDateChange(newDate: LocalDate) {
         _uiState.value = _uiState.value.copy(endDate = newDate)
+    }
+}
+
+class AthleteInjuryModelFactory(
+    private val globalViewModel: GlobalViewModel,
+    private val sharedPrefManager: SharedPreferencesManager
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AthleteInjuryScreenViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return AthleteInjuryScreenViewModel(globalViewModel, sharedPrefManager) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

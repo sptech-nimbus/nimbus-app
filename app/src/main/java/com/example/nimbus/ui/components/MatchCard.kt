@@ -23,22 +23,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.nimbus.R
+import com.example.nimbus.dto.Game.NextGameDTO
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun MatchCard(
-    adversaryName: String,
-    adversaryLogo: String,
-    dateTime: String,
-    place: String
+    lastGame: NextGameDTO
 ) {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")
+    val date = LocalDateTime.parse(lastGame.date).format(formatter)
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp)),
-        color = colorResource(id = R.color.gray_700),
-        border = BorderStroke(1.dp, colorResource(id = R.color.gray_500))
+        color = colorResource(id = R.color.gray_700)
     ) {
         Row(
             modifier = Modifier
@@ -48,8 +50,8 @@ fun MatchCard(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             AsyncImage(
-                model = adversaryLogo,
-                contentDescription = stringResource(id = R.string.challenger_logo, adversaryName),
+                model = lastGame.adversaryPicture,
+                contentDescription = stringResource(id = R.string.challenger_logo, lastGame.adversaryName),
                 modifier = Modifier.size(70.dp),
                 contentScale = ContentScale.Fit
             )
@@ -65,7 +67,7 @@ fun MatchCard(
                     )
 
                     Text(
-                        text = adversaryName,
+                        text = lastGame.adversaryName,
                         color = colorResource(id = R.color.orange_500),
                         fontFamily = catamaranFontFamily,
                         fontSize = 22.sp,
@@ -74,7 +76,7 @@ fun MatchCard(
                     )
 
                     Text(
-                        text = dateTime,
+                        text = date,
                         color = colorResource(id = R.color.gray_placeholder),
                         lineHeight = 8.sp,
                         fontFamily = poppinsFontFamily,
@@ -89,12 +91,13 @@ fun MatchCard(
 @Preview(showBackground = true)
 @Composable
 fun MatchCardPrewiew() {
+    val lastGame = NextGameDTO(
+        "Corinthians",
+        "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
+        "10/09/2024 - 20:30"
+    )
+
     Column {
-        MatchCard(
-            adversaryName = "Corinthians",
-            adversaryLogo = "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
-            dateTime = "10/09/2024 - 20:30",
-            place = "Rua Haddock Lobo"
-        )
+        MatchCard(lastGame)
     }
 }

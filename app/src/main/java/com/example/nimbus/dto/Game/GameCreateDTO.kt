@@ -7,5 +7,5 @@ data class GameCreateDTO(
     val challenged: String,
     val challenger: String,
     val inicialDateTime: LocalDateTime,
-    val finalDateTime: LocalDate
+    val finalDateTime: LocalDateTime
 )

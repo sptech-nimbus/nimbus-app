@@ -1,8 +1,8 @@
 package com.example.nimbus.api.interfaces
 
-import com.example.nimbus.api.ApiResponse
+import com.example.nimbus.domain.ApiResponse
 import com.example.nimbus.dto.Game.GameCreateDTO
-import com.example.nimbus.model.Game
+import com.example.nimbus.domain.Game
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

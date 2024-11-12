@@ -19,23 +19,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.nimbus.R
+import com.example.nimbus.domain.Game
+import com.example.nimbus.domain.Team
+import com.example.nimbus.dto.Game.GameWithTeamDTO
+import com.example.nimbus.dto.Team.TeamTransferDTO
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun Event(
     type: String,
-    challengerName: String,
-    secondText: String,
-    date: String,
-    time: String,
+    team: TeamTransferDTO,
+    game: GameWithTeamDTO
 ) {
     val icon = if(type == "Partida") R.drawable.match_icon else R.drawable.trainning_icon
-    val iconDesc = if(type == "Partida") "Ícone de partida" else "Ícone de treino"
-    val lineColor = if(type == "Partida") colorResource(id = R.color.orange_500) else colorResource(id = R.color.green)
-    val textColor = if(type == "Partida") colorResource(id = R.color.orange_100) else colorResource(id = R.color.gray_300)
+    val iconDesc = if(type == "Partida") "Partida" else "Treino"
+
+    val lineColor = if(game.confirmed) colorResource(id = R.color.green) else colorResource(id = R.color.orange_500)
+
+    val homeTeam: String?
+    val outTeam: String?
+
+    if(game.challenger == team.id) { homeTeam = team.name; outTeam = game.adversaryName }
+    else { homeTeam = game.adversaryName; outTeam = team.name }
 
     Row(
         modifier = Modifier
@@ -61,24 +72,37 @@ fun Event(
             )
             Column {
                 Text(
-                    text = challengerName,
+                    text = homeTeam,
                     color = colorResource(id = R.color.orange_100),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.width(165.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(modifier = Modifier.height(2.dp))
+
                 Text(
-                    text = secondText,
-                    color = textColor,
+                    text = outTeam,
+                    color = colorResource(id = R.color.gray_300),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.width(165.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
         Column(
             horizontalAlignment = Alignment.End
         ) {
+            val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+            val date = LocalDateTime.parse(game.inicialDateTime).format(dateFormatter)
+            val time = LocalDateTime.parse(game.inicialDateTime).format(timeFormatter)
+
             Text(
                 text = date,
                 color = colorResource(id = R.color.orange_100),
@@ -93,27 +117,5 @@ fun Event(
                 fontWeight = FontWeight.Medium
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EventPreview() {
-    Column(modifier = Modifier.background(Color.Black)) {
-        Event(
-            type = "Partida",
-            secondText = "Chicago Bulls",
-            challengerName = "Golden State Warriors",
-            date = "10/09/2024",
-            time = "20:30"
-        )
-
-        Event(
-            type = "Treino",
-            secondText = "Rua Haddock Lobo",
-            challengerName = "Golden State Warriors",
-            date = "10/09/2024",
-            time = "20:30"
-        )
     }
 }

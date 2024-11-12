@@ -30,10 +30,10 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    fun login(context: Context) {
+    fun login(context: Context, loginParam: UserLoginDTO?) {
         viewModelScope.launch {
             try {
-                val loginDTO = UserLoginDTO(_uiState.value.email, _uiState.value.password)
+                val loginDTO = if(loginParam == null) UserLoginDTO(_uiState.value.email, _uiState.value.password) else loginParam
                 val userApi = RetrofitService.getUsersApi(sharedPrefManager.getAuthToken())
                 Log.i("Login", sharedPrefManager.getAuthToken())
                 val response = userApi.login(loginDTO)

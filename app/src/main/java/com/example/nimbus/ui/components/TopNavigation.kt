@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -77,7 +78,7 @@ fun TopNavigation(
         }
 
         val interactionSource= remember { MutableInteractionSource() }
-        val icon = if(selectedPage == 1 && athletePage > 0) R.drawable.arrow_left else R.drawable.hamburguer_menu_icon
+        val icon = if(selectedPage == 0 && athletePage > 0) R.drawable.arrow_left else R.drawable.hamburguer_menu_icon
         Image(
             painter = painterResource(id = icon),
             contentDescription = stringResource(id = R.string.menu_icon_desc),
@@ -85,7 +86,7 @@ fun TopNavigation(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                if(selectedPage == 1 && athletePage > 0) onBackClick(0) else onMenuClick()
+                if(selectedPage == 0 && athletePage > 0) onBackClick(0) else onMenuClick()
             }
         )
 
@@ -97,11 +98,10 @@ fun TopNavigation(
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
             when(selectedPage) {
-                0 -> { screen = "Chat"; subtext =  uiState.selectedTeam?.name }
-                1 -> { screen = "Meu time"; subtext = uiState.selectedTeam?.name }
-                2 -> { screen = "Dashboard"; subtext = LocalDate.now().format(formatter) }
-                3 -> { screen = "Eventos"; subtext = uiState.selectedTeam?.name }
-                4 -> { screen = "Perfil"; }
+                0 -> { screen = "Meu time"; subtext = uiState.selectedTeam?.name }
+                1 -> { screen = "Dashboard"; subtext = LocalDate.now().format(formatter) }
+                2 -> { screen = "Eventos"; subtext = uiState.selectedTeam?.name }
+                3 -> { screen = "Perfil"; }
                 else -> { screen = "Error"; subtext = "" }
             }
 
@@ -124,15 +124,21 @@ fun TopNavigation(
             }
         }
 
-        Image(
+        //Image(
+        //    painter = painterResource(id = R.drawable.bell_icon),
+        //    contentDescription = stringResource(id = R.string.notification_icon_desc),
+        //    modifier = Modifier.clickable(
+        //        interactionSource = interactionSource,
+        //        indication = null
+        //    ) {
+        //        isSheetOpen = true
+        //    }
+        //)
+
+        Icon(
             painter = painterResource(id = R.drawable.bell_icon),
-            contentDescription = stringResource(id = R.string.notification_icon_desc),
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                isSheetOpen = true
-            }
+            contentDescription = null,
+            tint = colorResource(id = R.color.gray_900)
         )
     }
 }

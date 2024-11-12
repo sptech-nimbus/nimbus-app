@@ -33,33 +33,28 @@ import com.example.nimbus.ui.theme.poppinsFontFamily
 
 @Composable
 fun BottomNavigation(
-    screen: String,
     selectedPage: Int,
     onItemClick: (page: Int) -> Unit
 ) {
+    val screen = when(selectedPage) {
+        0 -> "Time"
+        1 -> "Home"
+        2 -> "Eventos"
+        3 -> "Perfil"
+        else -> "X"
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(colorResource(id = R.color.gray_700))
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-            .padding(horizontal = 16.dp, vertical = 20.dp),
+            .padding(horizontal = 32.dp, vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if(selectedPage == 0) {
-            ActiveNavItem(
-                iconRes = R.drawable.chat_icon_active,
-                iconDesc = R.string.chat,
-                screenName = screen
-            )
-        }
-        else NavItem(
-            iconRes = R.drawable.chat_icon,
-            iconDesc = R.string.chat,
-            onClick = { onItemClick(0) }
-        )
 
-        if(selectedPage == 1) {
+        if(selectedPage == 0) {
             ActiveNavItem(
                 iconRes = R.drawable.team_icon_active,
                 iconDesc = R.string.team,
@@ -69,10 +64,10 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.team_icon,
             iconDesc = R.string.team,
-            onClick = { onItemClick(1) }
+            onClick = { onItemClick(0) }
         )
 
-        if(selectedPage == 2) {
+        if(selectedPage == 1) {
             ActiveNavItem(
                 iconRes = R.drawable.house_icon_active,
                 iconDesc = R.string.home,
@@ -82,10 +77,10 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.house_icon,
             iconDesc = R.string.home,
-            onClick = { onItemClick(2) }
+            onClick = { onItemClick(1) }
         )
 
-        if(selectedPage == 3) {
+        if(selectedPage == 2) {
             ActiveNavItem(
                 iconRes = R.drawable.calender_icon_active,
                 iconDesc = R.string.events,
@@ -95,10 +90,10 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.calender_icon,
             iconDesc = R.string.events,
-            onClick = { onItemClick(3) }
+            onClick = { onItemClick(2) }
         )
 
-        if(selectedPage == 4) {
+        if(selectedPage == 3) {
             ActiveNavItem(
                 iconRes = R.drawable.user_icon_active,
                 iconDesc = R.string.account,
@@ -108,7 +103,7 @@ fun BottomNavigation(
         else NavItem(
             iconRes = R.drawable.user_icon,
             iconDesc = R.string.account,
-            onClick = { onItemClick(5) }
+            onClick = { onItemClick(3) }
         )
     }
 }

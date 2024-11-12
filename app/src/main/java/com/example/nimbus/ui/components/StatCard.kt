@@ -30,10 +30,11 @@ import androidx.compose.ui.unit.sp
 fun StatCard(
     label: String,
     value: String,
-    subvalue: String? = ""
+    subvalue: String? = "",
+    modifier: Modifier = Modifier
 ) {
     Container(
-        modifier = Modifier.width(140.dp)
+        modifier = modifier.width(150.dp)
     ) {
         Column {
             Text(

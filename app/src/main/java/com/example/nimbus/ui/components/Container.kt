@@ -32,8 +32,7 @@ fun Container(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp)),
-        color = color,
-        border = BorderStroke(1.dp, Color(0xFF353434))
+        color = color
     ) {
         Column(
             modifier = Modifier

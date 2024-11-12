@@ -1,16 +1,15 @@
 package com.example.nimbus.api.interfaces
 
-import com.example.nimbus.api.ApiResponse
-import com.example.nimbus.model.Athlete
+import com.example.nimbus.domain.ApiResponse
+import com.example.nimbus.domain.Athlete
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import java.util.UUID
 
 interface AthletesAPI {
-    //mudar response para apiresponse
+
     @GET("/athletes")
-    //suspend fun getAllAthletes(): Response<List<Athlete>>
     suspend fun getAllAthletes(): Response<ApiResponse<List<Athlete>>>
 
     @GET("/athletes/{id}")
