@@ -271,28 +271,6 @@ fun PlayerInformation(
                         interactionSource = interactionSource,
                         indication = null
                     ) {
-                        onPageClick(2)
-                    }
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.stats),
-                        contentDescription = null,
-                        Modifier.size(30.dp)
-                    )
-                    Text(
-                        text = "Estatísticas",
-                        color = colorResource(id = R.color.orange_100),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp),
-                    modifier = Modifier.clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
                         onPageClick(3)
                     }
                 ) {

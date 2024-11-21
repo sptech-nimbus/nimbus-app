@@ -43,12 +43,12 @@ class RegisterViewModel(
     val usersApi = RetrofitService.getUsersApi(sharedPrefManager.getAuthToken())
     val fileUploadApi = RetrofitService.getFilesApi(sharedPrefManager.getAuthToken())
 
-    init {
-        if(sharedPrefManager.getPersonaId().toString().isNotEmpty()) {
-            val userId = UserIdsDTO(personaId = sharedPrefManager.getPersonaId(), userId = UUID.fromString(sharedPrefManager.getUserId()))
-            _uiState.value = _uiState.value.copy(user = userId)
-        }
-    }
+    //init {
+    //    if(sharedPrefManager.getPersonaId().toString().isNotEmpty()) {
+    //        val userId = UserIdsDTO(personaId = sharedPrefManager.getPersonaId(), userId = UUID.fromString(sharedPrefManager.getUserId()))
+    //        _uiState.value = _uiState.value.copy(user = userId)
+    //    }
+    //}
 
     fun setStep(step: Int) {
         _uiState.value = _uiState.value.copy(step = step)
@@ -86,8 +86,11 @@ class RegisterViewModel(
     }
 
     suspend fun postUser(userData: UserCreateDTO): UserIdsDTO? {
+        val mockCoach = userData.coach?.copy(birthDate = "2004-12-15")
+        val mockUser = userData.copy(coach = mockCoach)
+
         return try {
-            val response = usersApi.post(userData)
+            val response = usersApi.post(mockUser)
             if (response.isSuccessful) {
                 val user = response.body()?.data
                 Log.i("Register", "Usuário criado com sucesso: $user")

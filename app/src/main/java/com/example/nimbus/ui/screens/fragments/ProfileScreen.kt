@@ -87,10 +87,10 @@ fun Profile(
 
             InfoLine(label = stringResource(id = R.string.age), info = "19 anos")
             InfoLine(label = stringResource(id = R.string.birth_date_short), info = "15/12/2004")
-            InfoLine(label = stringResource(id = R.string.phone), info = "(11) 99999-9999")
+            InfoLine(label = stringResource(id = R.string.phone), info = "(11) 96715-1224")
             InfoLine(
                 label = stringResource(id = R.string.email),
-                info = stringResource(id = R.string.email_placeholder)
+                info = "yuri.coach@email.com"
             )
             InfoLine(
                 label = stringResource(id = R.string.address),
@@ -98,13 +98,6 @@ fun Profile(
 
             )
             Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = stringResource(id = R.string.my_teams),
-                fontFamily = catamaranFontFamily,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.orange_100)
-            )
 
             //val scrollState = rememberLazyListState()
             //LazyRow(

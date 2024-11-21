@@ -35,7 +35,9 @@ private fun okHttpClient(token: String): OkHttpClient {
 }
 
 object RetrofitService {
-    val BASE_URL = "http://192.168.15.108:8080/" //ip casa
+    //val BASE_URL = "http://192.168.15.108:8080/" //ip casa
+    //val BASE_URL = "http://192.168.77.1:8080/"
+    val BASE_URL = "http://54.173.73.226:8080/"
 
     fun getRetrofit(token: String): Retrofit {
         return Retrofit.Builder()

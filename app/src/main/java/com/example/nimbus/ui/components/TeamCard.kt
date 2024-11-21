@@ -101,13 +101,13 @@ fun TeamCard(
             }
             val athletesCount = team.athletes?.size ?: 0
 
-            Text(
-                text = stringResource(id = R.string.players_amount, athletesCount),
-                color = colorResource(id = R.color.gray_400),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = poppinsFontFamily,
-            )
+            //Text(
+            //    text = stringResource(id = R.string.players_amount, athletesCount),
+            //    color = colorResource(id = R.color.gray_400),
+            //    fontSize = 16.sp,
+            //    fontWeight = FontWeight.Medium,
+            //    fontFamily = poppinsFontFamily,
+            //)
         }
     }
 }
