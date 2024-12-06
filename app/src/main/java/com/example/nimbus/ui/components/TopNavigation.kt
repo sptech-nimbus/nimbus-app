@@ -47,7 +47,8 @@ fun TopNavigation(
     onBackClick: (page: Int) -> Unit = {},
     selectedPage: Int,
     globalViewModel: GlobalViewModel,
-    athletePage: Int = 0
+    athletePage: Int = 0,
+    adversaryName: String = ""
 ) {
     val uiState by globalViewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
@@ -78,7 +79,7 @@ fun TopNavigation(
         }
 
         val interactionSource= remember { MutableInteractionSource() }
-        val icon = if(selectedPage == 0 && athletePage > 0) R.drawable.arrow_left else R.drawable.hamburguer_menu_icon
+        val icon = if((selectedPage == 0 && athletePage > 0) || (selectedPage == 4 && athletePage > 0)) R.drawable.arrow_left else R.drawable.hamburguer_menu_icon
         Image(
             painter = painterResource(id = icon),
             contentDescription = stringResource(id = R.string.menu_icon_desc),
@@ -102,6 +103,8 @@ fun TopNavigation(
                 1 -> { screen = "Dashboard"; subtext = LocalDate.now().format(formatter) }
                 2 -> { screen = "Eventos"; subtext = uiState.selectedTeam?.name }
                 3 -> { screen = "Perfil"; }
+                4 -> { screen = "Previsão do jogo"; subtext = "Adversãrio não selecionado" }
+                5 -> { screen = "Previsão de jogo"; subtext = "Contra " + adversaryName }
                 else -> { screen = "Error"; subtext = "" }
             }
 

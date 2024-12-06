@@ -320,7 +320,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
-                                1 -> Dashboard(dashboardViewModel, globalViewModel)
+                                1 -> Dashboard(dashboardViewModel, globalViewModel, context)
                                 2 -> Events(eventsViewModel, globalViewModel)
                                 3 -> Profile(globalViewModel, sharedPrefManager)
                             }

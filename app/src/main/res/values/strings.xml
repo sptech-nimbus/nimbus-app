@@ -108,6 +108,7 @@
     <string name="team_picture">Escudo do time></string>
     <string name="team_register_text">Agora insira as informações sobre seu time para finalizar seu cadastro!</string>
     <string name="event_color_info">"Eventos verdes são eventos confirmados pelos times desafiados, enquanto que os laranjas ainda possuem sua confirmação pendente."</string>
+    <string name="win_probability">Com base nos últimos %1$d jogos, a chance de vitória é %2$s</string>
 
     <!-- ACTIVITIES -->
     <string name="title_activity_splash_screen">SplashScreen</string>
@@ -123,4 +124,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_team_register">TeamRegisterActivity</string>
+    <string name="title_activity_prediction">PredictionActivity</string>
+    <string name="title_activity_prediction_aiactivity">PredictionAIActivity</string>
 </resources>

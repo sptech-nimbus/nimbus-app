@@ -18,6 +18,11 @@
         android:theme="@style/Theme.Nimbus"
         tools:targetApi="31">
         <activity
+            android:name=".ui.screens.PredictionAIActivity"
+            android:exported="true"
+            android:label="@string/title_activity_prediction_aiactivity"
+            android:theme="@style/Theme.Nimbus" />
+        <activity
             android:name=".ui.screens.TeamRegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_team_register"

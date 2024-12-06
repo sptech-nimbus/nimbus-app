@@ -1,6 +1,10 @@
 package com.example.nimbus.ui.screens.fragments
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,10 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +44,7 @@ import com.example.nimbus.ui.components.Container
 import com.example.nimbus.ui.components.MatchCard
 import com.example.nimbus.ui.components.PendingResult
 import com.example.nimbus.ui.components.StatCard
+import com.example.nimbus.ui.screens.PredictionAIActivity
 import com.example.nimbus.ui.theme.catamaranFontFamily
 import com.example.nimbus.ui.theme.poppinsFontFamily
 import com.example.nimbus.ui.viewmodels.DashboardViewModel
@@ -47,7 +54,8 @@ import com.example.nimbus.ui.viewmodels.GlobalViewModel
 fun Dashboard(
     viewModel: DashboardViewModel,
     globalViewModel: GlobalViewModel,
-    modifier: Modifier = Modifier
+    context: Context,
+    modifier: Modifier = Modifier,
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val team = globalViewModel.getSelectedTeam()
@@ -191,11 +199,19 @@ fun Dashboard(
                             contentDescription = null,
                             tint = colorResource(id = R.color.orange_100)
                         )
+
+                        val interactionSource = remember { MutableInteractionSource() }
                         Text(
                             text = "Obter previsão de jogo feita por IA",
                             color = colorResource(id = R.color.orange_100),
                             fontFamily = catamaranFontFamily,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.clickable(
+                                interactionSource = interactionSource,
+                                indication = null
+                            )  {
+                                context.startActivity(Intent(context, PredictionAIActivity::class.java))
+                            }
                         )
                     }
                 }
